@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+# Rclone RC Config
+RCLONE_RC_URL="http://rclone:5572"
+
+# Define Colors
+GREEN='\e[1;32m'
+RED='\e[1;31m'
+NC='\e[0m'
+
+# 1. Identify Target
+DOWNLOAD_PATH="$3"
+# Strip trailing slash if present
+DOWNLOAD_PATH="${DOWNLOAD_PATH%/}"
+
+RELATIVE_PATH=${DOWNLOAD_PATH#/downloads/}
+TOP_NAME=$(echo "$RELATIVE_PATH" | cut -d/ -f1)
+FINAL_TARGET="/downloads/$TOP_NAME"
+REMOTE_DEST="onedrive:Aria2Downloads"
+
+# Log Start
+echo -e "$(date) [INFO] UPLOAD STARTED: $TOP_NAME" >> /config/upload.log
+
+# Wait for 15 seconds to prevent OneDrive errors
+echo -e "$(date) [INFO] Waiting 15s for file stability..." >> /config/upload.log
+sleep 15
+
+# 2. Prepare API Call
+if [ -d "$FINAL_TARGET" ]; then
+    # Directory Move -> sync/move
+    OPERATION="sync/move"
+    JSON_PAYLOAD=$(jq -n \
+                  --arg srcFs "$FINAL_TARGET" \
+                  --arg dstFs "$REMOTE_DEST/$TOP_NAME" \
+                  --argjson deleteEmptySrcDirs true \
+                  --argjson _async true \
+                  '{srcFs: $srcFs, dstFs: $dstFs, deleteEmptySrcDirs: $deleteEmptySrcDirs, _async: $_async}')
+else
+    # Single File Move -> operations/movefile
+    OPERATION="operations/movefile"
+    JSON_PAYLOAD=$(jq -n \
+                  --arg srcFs "/downloads" \
+                  --arg srcRemote "$TOP_NAME" \
+                  --arg dstFs "$REMOTE_DEST" \
+                  --arg dstRemote "$TOP_NAME" \
+                  --argjson _async true \
+                  '{srcFs: $srcFs, srcRemote: $srcRemote, dstFs: $dstFs, dstRemote: $dstRemote, _async: $_async}')
+fi
+
+# 3. Trigger Job
+RESPONSE=$(curl -s -u "admin:654550" -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$RCLONE_RC_URL/$OPERATION")
+JOB_ID=$(echo "$RESPONSE" | jq -r '.jobid')
+
+if [ "$JOB_ID" == "null" ] || [ -z "$JOB_ID" ]; then
+    echo -e "$(date) ${RED}[ERROR] Failed to start Rclone job. Response: $RESPONSE${NC}" >> /config/upload.log
+    exit 1
+fi
+
+echo -e "$(date) [INFO] Job started: $JOB_ID. Polling for completion..." >> /config/upload.log
+
+# 4. Poll Job Status
+while true; do
+    # Pass jobid as number, not string
+    STATUS_CMD=$(curl -s -u "admin:654550" -X POST -H "Content-Type: application/json" -d "{\"jobid\": $JOB_ID}" "$RCLONE_RC_URL/job/status")
+    FINISHED=$(echo "$STATUS_CMD" | jq -r '.finished')
+    SUCCESS=$(echo "$STATUS_CMD" | jq -r '.success')
+    ERROR=$(echo "$STATUS_CMD" | jq -r '.error')
+
+    if [ "$FINISHED" == "true" ]; then
+        if [ "$SUCCESS" == "true" ]; then
+            echo -e "$(date) ${GREEN}[SUCCESS] 100% FINISHED: $TOP_NAME moved to OneDrive!${NC}" >> /config/upload.log
+            # Cleanup control files
+            find /downloads -name "*.aria2" -delete
+            exit 0
+        else
+            echo -e "$(date) ${RED}[ERROR] Job failed: $ERROR${NC}" >> /config/upload.log
+            exit 1
+        fi
+    fi
+    sleep 2
+done

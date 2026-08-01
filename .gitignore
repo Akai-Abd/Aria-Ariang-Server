@@ -1,0 +1,32 @@
+# Dependencies & build artifacts
+node_modules/
+dist/
+*.log
+
+# Secrets
+.env
+
+# Database
+filebrowser.db
+
+# SSL certs
+certs/
+
+# Downloads
+downloads/
+
+# Rclone tokens (sensitive)
+rclone/rclone.conf
+
+# Aria2 runtime
+aria2/dht.dat
+aria2/dht6.dat
+aria2/aria2.session
+aria2/upload.lock
+aria2/upload.log
+aria2/tracker.log
+aria2/rclone
+
+# Backups
+.backups/
+aria2/rclone.conf
