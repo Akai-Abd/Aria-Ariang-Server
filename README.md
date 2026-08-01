@@ -7,6 +7,7 @@
 ### **Self-Hosted Download Station with Multi-Cloud Sync**
 
 [![MIT License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
+[![Docker Hub](https://img.shields.io/badge/Docker%20Hub-Images-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/u/baba2580)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](docker-compose.yml)
 [![Aria2](https://img.shields.io/badge/Aria2-Pro-FF6600?style=for-the-badge&logo=aria2&logoColor=white)](https://aria2.github.io/)
 [![Nginx](https://img.shields.io/badge/Nginx-Reverse%20Proxy-009639?style=for-the-badge&logo=nginx&logoColor=white)](aria2-nginx.conf)
@@ -37,7 +38,9 @@
 - [🧩 Stack Components](#stack-components)
 - [🌐 Services & Access](#services--access)
 - [📋 Prerequisites](#prerequisites)
+- [📘 Deployment Guide](#deployment-guide)
 - [⚡ Quick Start](#quick-start)
+- [🐳 Deploy with Docker Hub](#deploy-with-docker-hub)
 - [☁️ Deploy on Oracle Cloud VPS](#deploy-on-oracle-cloud-vps)
 - [☁️ Multi-Cloud Upload](#multi-cloud-upload)
 - [⚙️ Configuration Reference](#configuration-reference)
@@ -140,7 +143,7 @@
      │            └──────┬──────┘                          │
      │                   │                                 │
      │            ┌──────▼──────┐                          │
-     │            │   Rclone    ◄──────────────────────────┘
+     │            │   Rclone    ◄──────────────────────┘
      │            │   :5572     │
      │            └──────┬──────┘
      │                   │
@@ -153,8 +156,8 @@
      │
      │            ┌────────────┐
      └────────────► Certbot    │
-                  │ (SSL Auto) │
-                  └────────────┘
+                   │ (SSL Auto) │
+                   └────────────┘
 ```
 
 ---
@@ -164,13 +167,13 @@
 
 | Component | Container Image | Primary Purpose |
 | :--- | :--- | :--- |
-| 🔽 **Aria2 Pro** | `p3terx/aria2-pro` | High-speed multi-threaded download engine |
+| 🔽 **Aria2 Pro** | [`baba2580/aria2-pro`](https://hub.docker.com/r/baba2580/aria2-pro) | High-speed multi-threaded download engine |
 | 🎨 **AriaNg** | `nginx:alpine` (static) | Modern web GUI frontend for Aria2 RPC |
 | ☁️ **Rclone** | `rclone/rclone` | Multi-cloud transfer and sync engine |
 | 📁 **FileBrowser** | `filebrowser/filebrowser` | Web-based file manager & previewer |
 | 🐳 **Portainer** | `portainer/portainer-ce:lts` | Visual container management dashboard |
 | 🌐 **Nginx** | `nginx:alpine` | Reverse proxy, SSL termination & HTTP Basic Auth |
-| 📊 **Nexly Dashboard** | Custom Node.js | Real-time WebSocket monitoring & cloud manager |
+| 📊 **Nexly Dashboard** | [`baba2580/nexly-dashboard`](https://hub.docker.com/r/baba2580/nexly-dashboard) | Real-time WebSocket monitoring & cloud manager |
 | 🔐 **Certbot** | `certbot/certbot` | Automated Let's Encrypt SSL certificate issuance |
 
 ---
@@ -204,6 +207,16 @@
 | **Docker Compose** | v2.0+ | Latest Docker Compose Plugin |
 | **Domain Name** | Any domain with DNS `A Record` | Cloudflare / DDNS supported |
 | **Network Ports** | Ports `80` and `443` open | Standard HTTP/HTTPS inbound |
+
+---
+
+<a id="deployment-guide"></a>
+## 📘 Deployment Guide
+
+> [!TIP]
+> **First time deploying?** Follow the step-by-step **[Deployment Guide](DEPLOYMENT.md)** — it covers everything from getting a server to verifying your deployment, with detailed explanations for each step.
+>
+> The Quick Start below is a condensed reference for experienced users.
 
 ---
 
@@ -259,11 +272,13 @@ openssl req -x509 -nodes -days 365 \
   -subj "/CN=your.domain.com"
 ```
 
-### <kbd>Step 5</kbd> — Build & Launch Services
+### <kbd>Step 5</kbd> — Launch Services
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 ```
+
+> Pre-built images are pulled automatically from [Docker Hub](https://hub.docker.com/u/baba2580). No `--build` flag needed.
 
 ### <kbd>Step 6</kbd> — Issue Production Let's Encrypt SSL
 
@@ -294,6 +309,199 @@ docker compose ps
 # Run health check diagnostic
 bash check.sh
 ```
+
+---
+
+<a id="deploy-with-docker-hub"></a>
+## 🐳 Deploy with Docker Hub
+
+> [!TIP]
+> This project publishes **pre-built, multi-architecture Docker images** to Docker Hub. You don't need to build anything — just pull and run.
+
+### Docker Hub Images
+
+| Image | Architectures | Docker Hub |
+| :--- | :---: | :--- |
+| `baba2580/aria2-pro` | `amd64` / `arm64` | [hub.docker.com/r/baba2580/aria2-pro](https://hub.docker.com/r/baba2580/aria2-pro) |
+| `baba2580/nexly-dashboard` | `amd64` / `arm64` | [hub.docker.com/r/baba2580/nexly-dashboard](https://hub.docker.com/r/baba2580/nexly-dashboard) |
+
+> The remaining 5 services (`nginx:alpine`, `rclone/rclone`, `filebrowser/filebrowser`, `portainer/portainer-ce:lts`, `certbot/certbot`) are official images pulled directly from Docker Hub — no custom build needed.
+
+---
+
+### <kbd>Step 1</kbd> — Clone the Repository
+
+The repo contains configuration files, scripts, and the AriaNg web frontend that Docker containers need via volume mounts.
+
+```bash
+git clone https://github.com/Akai-Abd/Aria-Ariang-Server.git
+cd Aria-Ariang-Server
+```
+
+### <kbd>Step 2</kbd> — Configure Environment
+
+```bash
+# Copy template and edit with your values
+cp .env.example .env
+nano .env
+```
+
+Set each variable:
+
+```env
+RPC_SECRET=your_secure_rpc_secret       # Aria2 RPC token (used by AriaNg to connect)
+RCLONE_USER=admin                        # Rclone Web GUI username
+RCLONE_PASS=your_secure_password         # Rclone Web GUI password
+FB_USER=admin                            # FileBrowser username
+FB_PASS=your_secure_password             # FileBrowser password
+TZ=Asia/Kolkata                          # Your server timezone
+PUID=1001                                # Linux User ID for file permissions
+PGID=1001                                # Linux Group ID for file permissions
+DOMAIN=your.domain.com                   # Your domain name
+```
+
+### <kbd>Step 3</kbd> — Set Up HTTP Basic Authentication
+
+This password protects all web routes (AriaNg, Dashboard, FileBrowser, Portainer, Rclone).
+
+```bash
+# Install htpasswd utility (one-time)
+sudo apt install apache2-utils -y
+
+# Create password file — replace 'admin' and 'yourpassword' with your credentials
+htpasswd -cb .htpasswd admin yourpassword
+```
+
+### <kbd>Step 4</kbd> — Generate SSL Certificate
+
+Nginx requires an SSL certificate to start. Create a temporary self-signed one first:
+
+```bash
+mkdir -p certs
+openssl req -x509 -nodes -days 365 \
+  -newkey rsa:2048 \
+  -keyout certs/aria2.key \
+  -out certs/aria2.pem \
+  -subj "/CN=your.domain.com"
+```
+
+> [!NOTE]
+> After deployment, you'll replace this with a real Let's Encrypt certificate via Certbot (Step 6).
+
+### <kbd>Step 5</kbd> — Deploy
+
+```bash
+docker compose up -d
+```
+
+Docker will automatically:
+1. **Pull** `baba2580/aria2-pro:latest` and `baba2580/nexly-dashboard:latest` from Docker Hub
+2. **Pull** `nginx:alpine`, `rclone/rclone`, `filebrowser/filebrowser`, `portainer/portainer-ce:lts`, `certbot/certbot`
+3. **Start** all 7 containers on an isolated Docker bridge network
+4. **Expose** only ports `80` and `443` to the internet
+
+```
+Expected output:
+ ✔ Network aria2-net             Created
+ ✔ Container aria2-pro           Started
+ ✔ Container nginx-proxy         Started
+ ✔ Container rclone              Started
+ ✔ Container filebrowser         Started
+ ✔ Container portainer           Started
+ ✔ Container nexly-dashboard     Started
+ ✔ Container certbot             Started
+```
+
+### <kbd>Step 6</kbd> — Get Real SSL Certificate
+
+Once containers are running and your domain's DNS `A` record points to your server IP:
+
+```bash
+# Request Let's Encrypt certificate
+docker compose run --rm certbot certonly \
+  --webroot -w /var/www/certbot \
+  -d your.domain.com \
+  --email your@email.com \
+  --agree-tos --no-eff-email
+
+# Update Nginx to use the real certificate
+nano aria2-nginx.conf
+```
+
+Change the SSL lines to:
+
+```nginx
+ssl_certificate /etc/letsencrypt/live/your.domain.com/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/your.domain.com/privkey.pem;
+```
+
+Then reload Nginx:
+
+```bash
+docker compose restart nginx-proxy
+```
+
+### <kbd>Step 7</kbd> — Verify Everything Works
+
+```bash
+# Check all containers are running
+docker compose ps
+
+# Run the built-in health check
+bash check.sh
+```
+
+Access your services at:
+
+| Service | URL |
+| :--- | :--- |
+| **AriaNg** (Download UI) | `https://your.domain.com/` |
+| **Nexly Dashboard** | `https://your.domain.com/live/` |
+| **FileBrowser** | `https://your.domain.com/download/` |
+| **Portainer** | `https://your.domain.com/portainer/` |
+| **Rclone Web GUI** | `https://your.domain.com/rclone/` |
+
+---
+
+### Updating to a New Version
+
+When a new release is published, update your deployment:
+
+```bash
+cd Aria-Ariang-Server
+
+# Pull latest config changes
+git pull
+
+# Pull latest Docker Hub images and restart
+docker compose pull
+docker compose up -d
+```
+
+> [!NOTE]
+> Your downloads, configurations, rclone tokens, and cloud destinations are stored in local volumes — they are **never affected** by image updates.
+
+---
+
+### Pinning a Specific Version
+
+To lock your deployment to a specific release instead of `latest`:
+
+```bash
+# Edit docker-compose.yml
+nano docker-compose.yml
+
+# Change:
+#   image: baba2580/aria2-pro:latest
+# To:
+#   image: baba2580/aria2-pro:1.0.0
+#
+# Same for nexly-dashboard
+```
+
+Available tags are listed at:
+- [baba2580/aria2-pro tags](https://hub.docker.com/r/baba2580/aria2-pro/tags)
+- [baba2580/nexly-dashboard tags](https://hub.docker.com/r/baba2580/nexly-dashboard/tags)
 
 ---
 
@@ -356,8 +564,8 @@ git clone https://github.com/Akai-Abd/Aria-Ariang-Server.git
 cd Aria-Ariang-Server
 cp .env.example .env
 
-# Start stack
-docker compose up -d --build
+# Start stack (pulls pre-built images from Docker Hub)
+docker compose up -d
 ```
 
 ---
@@ -636,6 +844,8 @@ bash check.sh
 
 ```
 Aria-Ariang-Server/
+├── .github/workflows/          # CI/CD automation
+│   └── docker-publish.yml      # Docker Hub multi-arch image build & push
 ├── assets/                     # README media assets & banners
 │   └── banner.png              # HD Transparent Hero Banner
 ├── aria2/                      # Aria2 configuration & event hooks
@@ -644,6 +854,7 @@ Aria-Ariang-Server/
 ├── ariang/                     # AriaNg static web frontend
 ├── certs/                      # SSL certificates directory
 ├── dashboard/                  # Nexly Live Monitoring Dashboard (Node.js)
+│   ├── Dockerfile              # Dashboard container image definition
 │   ├── server.js               # Express + Socket.io backend
 │   └── public/                 # Real-time Web UI assets
 ├── downloads/                  # Storage volume for active & finished downloads
@@ -657,8 +868,11 @@ Aria-Ariang-Server/
 ├── aria2-nginx.conf            # Nginx reverse proxy configuration
 ├── check.sh                    # System health verification utility
 ├── cloud-destinations.json     # Multi-cloud target list
+├── DEPLOYMENT.md               # Step-by-step deployment guide
 ├── docker-compose.yml          # Docker Compose orchestration
+├── Dockerfile.aria2            # Aria2 Pro container image definition
 ├── LICENSE                     # MIT License
+├── MAINTENANCE_CHEAT_SHEET.md  # Server & Git sync cheat sheet
 └── README.md                   # Repository Documentation
 ```
 

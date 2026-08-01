@@ -1,8 +1,6 @@
 services:
   aria2-pro:
-    build:
-      context: .
-      dockerfile: Dockerfile.aria2
+    image: baba2580/aria2-pro:latest
     container_name: aria2-pro
     user: "0:0"
     environment:
@@ -84,7 +82,7 @@ services:
     # ponytail: no healthcheck — portainer:lts has no /bin/sh
 
   dashboard:
-    build: ./dashboard
+    image: baba2580/nexly-dashboard:latest
     container_name: nexly-dashboard
     restart: unless-stopped
     environment:

@@ -3,6 +3,9 @@ node_modules/
 dist/
 *.log
 
+# Docker dev override (production uses Docker Hub images)
+docker-compose.override.yml
+
 # Secrets
 .env
 
