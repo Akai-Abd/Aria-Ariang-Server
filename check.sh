@@ -2,8 +2,8 @@
 # Advanced Config Check Script
 # Fixed: Absolute paths for Oracle Cloud deployment
 
-# Project directory
-PROJECT_DIR="$HOME/aria2-config"
+# Project directory (dynamic resolution)
+PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # --- Colors & Styles ---
 BOLD='\033[1m'

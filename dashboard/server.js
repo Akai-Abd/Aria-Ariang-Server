@@ -631,20 +631,72 @@ app.delete('/api/cloud/destinations/:id', (req, res) => {
     res.json({ success: true });
 });
 
-// List available rclone remotes (for the "add destination" UI)
+const RCLONE_CONF_FILE = '/config/rclone/rclone.conf';
+
+function parseRcloneConfRemotes() {
+    try {
+        if (fs.existsSync(RCLONE_CONF_FILE)) {
+            const fileContent = fs.readFileSync(RCLONE_CONF_FILE, 'utf8');
+            const remotes = [];
+            let currentRemote = null;
+            fileContent.split(String.fromCharCode(10)).forEach(line => {
+                line = line.trim();
+                if (line.startsWith('[') && line.endsWith(']')) {
+                    currentRemote = line.substring(1, line.length - 1);
+                    remotes.push({ name: currentRemote, type: 'cloud' });
+                } else if (currentRemote && line.startsWith('type =')) {
+                    const typeVal = line.split('=')[1].trim();
+                    const r = remotes.find(x => x.name === currentRemote);
+                    if (r) r.type = typeVal;
+                }
+            });
+            return remotes;
+        }
+    } catch (e) {
+        console.error('[RCLONE] Failed to parse rclone.conf:', e.message);
+    }
+    return [];
+}
+
+// Get raw rclone.conf content
+app.get('/api/cloud/rclone-config', (req, res) => {
+    try {
+        const content = fs.existsSync(RCLONE_CONF_FILE) ? fs.readFileSync(RCLONE_CONF_FILE, 'utf8') : '';
+        res.json({ success: true, config: content });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Update raw rclone.conf content
+app.post('/api/cloud/rclone-config', (req, res) => {
+    try {
+        const { config } = req.body;
+        if (typeof config !== 'string') return res.status(400).json({ error: 'config must be string' });
+        fs.writeFileSync(RCLONE_CONF_FILE, config, 'utf8');
+        res.json({ success: true });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// List available rclone remotes (for the add destination UI)
 app.get('/api/cloud/remotes', async (req, res) => {
+    const remotesMap = new Map();
+    const fileRemotes = parseRcloneConfRemotes();
+    fileRemotes.forEach(r => remotesMap.set(r.name, r));
+
     const result = await callRclone('config/listremotes');
     if (result && result.remotes) {
-        // Get type info for each remote
-        const remotes = [];
         for (const name of result.remotes) {
-            const info = await callRclone('config/get', { name });
-            remotes.push({ name, type: info?.type || 'unknown' });
+            const cleanName = name.replace(/:$/, '');
+            if (!remotesMap.has(cleanName)) {
+                const info = await callRclone('config/get', { name: cleanName });
+                remotesMap.set(cleanName, { name: cleanName, type: info?.type || 'unknown' });
+            }
         }
-        res.json({ remotes });
-    } else {
-        res.json({ remotes: [] });
     }
+    res.json({ remotes: Array.from(remotesMap.values()) });
 });
 
 // Test a cloud destination by listing its root

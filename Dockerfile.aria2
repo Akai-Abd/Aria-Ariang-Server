@@ -1,6 +1,6 @@
 FROM p3terx/aria2-pro
 RUN apk add --no-cache docker-cli
 # Auto-update BT trackers daily at 4 AM and backup configs at 3 AM
-RUN echo '0 4 * * * /config/script/tracker.sh /config/aria2.conf RPC >> /config/tracker.log 2>&1' > /etc/crontabs/root && \
-    echo '0 3 * * * /config/script/backup.sh >> /config/backup.log 2>&1' >> /etc/crontabs/root
-CMD ["sh", "-c", "crond && /init"]
+RUN echo '0 4 * * * /config/script/tracker.sh /config/aria2.conf RPC >> /config/tracker.log 2>&1' > /etc/crontabs/root &&     echo '0 3 * * * /config/script/backup.sh >> /config/backup.log 2>&1' >> /etc/crontabs/root
+# ponytail: start crond as s6 service instead of before /init to avoid double service start
+RUN mkdir -p /etc/services.d/crond &&     printf '#!/usr/bin/with-contenv sh\nexec crond -f\n' > /etc/services.d/crond/run &&     chmod +x /etc/services.d/crond/run

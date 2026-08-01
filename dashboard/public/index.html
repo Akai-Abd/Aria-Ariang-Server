@@ -809,7 +809,10 @@
         <div id="cloudPanel" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; z-index:100000; background:rgba(0,0,0,0.8); backdrop-filter:blur(4px);">
             <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:90%; max-width:600px; max-height:80vh; overflow-y:auto; background:var(--bg-panel); border:1px solid var(--neon-blue); border-radius:8px; padding:24px; box-shadow:0 0 40px rgba(0,243,255,0.15);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:12px;">
-                    <h2 style="margin:0; border:none; padding:0;">☁️ Cloud Storage Destinations</h2>
+                    <div style="display:flex; align-items:center; gap:12px;">
+    <h2 style="margin:0; border:none; padding:0;">☃️ Cloud Storage Destinations</h2>
+    <button id="toggleRcloneConfBtn" style="background:rgba(0,243,255,0.1); border:1px solid var(--neon-blue); color:var(--neon-blue); padding:4px 10px; border-radius:4px; cursor:pointer; font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:1px;">⚙️ EDIT RCLONE CONF</button>
+</div>
                     <button id="cloudCloseBtn" style="background:none; border:1px solid rgba(255,255,255,0.2); color:var(--text-main); font-size:18px; cursor:pointer; padding:4px 10px; border-radius:4px;">✕</button>
                 </div>
 
@@ -832,6 +835,20 @@
                         <input id="cloudNewPath" placeholder="Aria2Downloads" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); color:var(--text-main); padding:8px; border-radius:4px; font-family:'Share Tech Mono',monospace; font-size:12px; box-sizing:border-box;">
                     </div>
                     <button id="cloudAddBtn" style="background:linear-gradient(135deg,rgba(0,243,255,0.2),rgba(0,255,157,0.2)); border:1px solid var(--neon-green); color:#fff; padding:8px 20px; border-radius:4px; cursor:pointer; font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase;">+ Add Destination</button>
+                </div>
+
+                <div id="rcloneConfSection" style="display:none; margin-top:16px; border:1px solid rgba(0,243,255,0.3); border-radius:6px; padding:16px; background:rgba(0,0,0,0.4);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                        <h3 style="margin:0; font-family:'Rajdhani',sans-serif; font-size:12px; color:var(--neon-blue); letter-spacing:1.5px; text-transform:uppercase;">⚙️ Raw Rclond Config (rclone.conf)</h3>
+                        <span id="rcloneConfStatus" style="font-size:11px; color:var(--neon-green);"></span>
+                    </div>
+                    <p style="font-size:11px; color:var(--text-dim); margin:0 0 10px 0;">Paste or edit your rclone remote config below (e.g. <code>[gdrive]</code>, <code>[onedrive]</code>, <code>[s3]</code>):</p>
+                    <textarea id="rcloneConfText" rows="8" placeholder="[gdrive]
+type = drive
+token = {"access_token":"..."}" style="width:100%; background:rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.1); color:var(--neon-green); font-family:'Share Tech Mono',monospace; font-size:11px; padding:10px; border-radius:4px; box-sizing:meta-box; resize:vertical;"></textarea>
+                    <div style="display:flex; gap:10px; margin-top:10px;">
+                        <button id="saveRcloneConfBtn" style="background:var(--neon-blue); border:none; color:#000; font-weight:bold; padding:8px 16px; border-radius:4px; cursor:pointer; font-family:'Share Tech Mono',monospace; font-size:11px; letter-spacing:1px; text-transform:uppercase;">💾 SAVE RCLONE CONFIG</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1318,6 +1335,62 @@
             const remoteSelect = document.getElementById('cloudNewRemote');
 
             openBtn.addEventListener('click', () => { panel.style.display = 'block'; loadDestinations(); loadRemotes(); });
+
+            const toggleConfBtn = document.getElementById('toggleRcloneConfBtn');
+            const confSection = document.getElementById('rcloneConfSection');
+            const confText = document.getElementById('rcloneConfText');
+            const saveConfBtn = document.getElementById('saveRcloneConfBtn');
+            const confStatus = document.getElementById('rcloneConfStatus');
+
+            if (toggleConfBtn && confSection) {
+                toggleConfBtn.addEventListener('click', async () => {
+                    if (confSection.style.display === 'none' || !confSection.style.display) {
+                        confSection.style.display = 'block';
+                        await loadRcloneConfig();
+                    } else {
+                        confSection.style.display = 'none';
+                    }
+                });
+            }
+
+            async function loadRcloneConfig() {
+                try {
+                    const res = await fetch('./api/cloud/rclone-config');
+                    const data = await res.json();
+                    if (confText) confText.value = data.config || '';
+                } catch(e) {
+                    if (confText) confText.value = '# Error loading rclone.conf';
+                }
+            }
+
+            if (saveConfBtn) {
+                saveConfBtn.addEventListener('click', async () => {
+                    try {
+                        saveConfBtn.disabled = true;
+                        saveConfBtn.innerText = 'SAVING...';
+                        const res = await fetch('./api/cloud/rclone-config', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ config: confText.value })
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            if (confStatus) {
+                                confStatus.innerText = 'Saved & Remotes Updated!';
+                                setTimeout(() => confStatus.innerText = '', 3000);
+                            }
+                            await loadRemotes();
+                        } else {
+                            alert('Error: ' + (data.error || 'Failed to save config'));
+                        }
+                    } catch(e) {
+                        alert('Failed to save rclone config');
+                    } finally {
+                        saveConfBtn.disabled = false;
+                        saveConfBtn.innerText = 'SAVE RCLONE CONFIG';
+                    }
+                });
+            }
             closeBtn.addEventListener('click', () => { panel.style.display = 'none'; });
             panel.addEventListener('click', (e) => { if (e.target === panel) panel.style.display = 'none'; });
 

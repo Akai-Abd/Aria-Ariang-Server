@@ -1,6 +1,8 @@
+import os
 import re
 
-file_path = '/home/ubuntu/aria2-config/dashboard/public/index.html'
+script_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(script_dir, 'dashboard', 'public', 'index.html')
 with open(file_path, 'r', encoding='utf-8') as f:
     content = f.read()
 

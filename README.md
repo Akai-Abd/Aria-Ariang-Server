@@ -440,6 +440,90 @@ Edit `cloud-destinations.json` directly:
 
 ---
 
+### 🛠️ Step-by-Step Guide: Configuring Rclone Remotes on Local PC (Terminal)
+
+Because remote cloud providers (Google Drive, OneDrive, Dropbox) require web browser OAuth authentication, generate your remote token on your local PC via terminal, then paste the resulting config directly into the **Nexly Live Dashboard UI** (`⚙️ EDIT RCLONE CONF`) or server config.
+
+#### Prerequisites (Local PC)
+Install Rclone on your local terminal:
+- **Linux/macOS:** `curl https://rclone.org/install.sh | sudo bash`
+- **Windows (PowerShell):** `winget install Rclone.Rclone` or download from [rclone.org](https://rclone.org/downloads/)
+
+Run the interactive setup:
+```bash
+rclone config
+```
+
+---
+
+#### 1️⃣ Google Drive Setup
+1. Type `n` for **New remote**.
+2. Name it: `gdrive`
+3. Type `drive` for storage type.
+4. Client ID & Secret: Leave blank (press **Enter**).
+5. Access Scope: Select `1` (`drive` - Full access).
+6. Service Account File: Leave blank (press **Enter**).
+7. Advanced config: Type `n`.
+8. Use Web Browser (Auto config): Type `y`.
+   > A browser window will pop up. Sign into your Google account and click **Allow**.
+9. Configure as Shared/Team Drive: Type `n` (unless using a Team Drive).
+10. Confirm: Type `y` to save.
+
+---
+
+#### 2️⃣ Microsoft OneDrive Setup
+1. Type `n` for **New remote**.
+2. Name it: `onedrive`
+3. Type `onedrive` for storage type.
+4. Client ID & Secret: Leave blank (press **Enter**).
+5. National Cloud Region: Select `1` (`global`).
+6. Advanced config: Type `n`.
+7. Use Web Browser (Auto config): Type `y`.
+   > Log in with your Microsoft account in the opened browser window and grant permissions.
+8. Choose Drive Type: Select `1` (`OneDrive Personal or Business`).
+9. Drive ID Selection: Enter `1` to pick the primary drive.
+10. Confirm: Type `y` to save.
+
+---
+
+#### 3️⃣ MEGA Cloud Setup
+1. Type `n` for **New remote**.
+2. Name it: `mega`
+3. Type `mega` for storage type.
+4. Account Username / Email: Enter your MEGA account email.
+5. Password Option: Select `y` to enter password.
+6. Enter your MEGA account password.
+7. Advanced config: Type `n`.
+8. Confirm: Type `y` to save.
+
+---
+
+#### 4️⃣ Dropbox Setup
+1. Type `n` for **New remote**.
+2. Name it: `dropbox`
+3. Type `dropbox` for storage type.
+4. Client ID & Secret: Leave blank (press **Enter**).
+5. Advanced config: Type `n`.
+6. Use Web Browser (Auto config): Type `y`.
+   > Log into Dropbox in the browser and authorize Rclone.
+7. Confirm: Type `y` to save.
+
+---
+
+#### 5️⃣ Transferring Config to Nexly Dashboard / Server
+
+1. Open your generated local config file:
+   - **Linux/macOS:** `cat ~/.config/rclone/rclone.conf`
+   - **Windows:** `type %APPDATA%\rclone\rclone.conf`
+2. Copy the generated block(s) (e.g. `[gdrive]`, `[onedrive]`, `[mega]`, `[dropbox]`).
+3. Open **Nexly Live Dashboard** at `https://your.domain.com/live/`.
+4. Click **`☁️ CLOUD`** → Click **`⚙️ EDIT RCLONE CONF`**.
+5. Paste your config blocks into the text editor and click **`💾 SAVE RCLONE CONFIG`**.
+   > Your remotes will immediately populate the **Rclone Remote** dropdown menu for zero-downtime cloud uploads!
+
+
+---
+
 <a id="configuration-reference"></a>
 ## ⚙️ Configuration Reference
 

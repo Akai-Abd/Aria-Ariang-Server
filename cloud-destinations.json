@@ -1,12 +1,1 @@
-{
-  "destinations": [
-    {
-      "id": "onedrive-main",
-      "name": "OneDrive (Main)",
-      "remote": "onedrive",
-      "path": "Aria2Downloads",
-      "enabled": true,
-      "icon": "💎"
-    }
-  ]
-}
+{"destinations":[]}
