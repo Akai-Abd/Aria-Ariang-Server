@@ -461,13 +461,62 @@ curl -Ik https://your.domain.com
 
 ## ☁️ Multi-Cloud Upload
 
-Downloads are **automatically uploaded** to all enabled cloud destinations on completion.
+Downloads are **automatically uploaded** to all enabled cloud destinations on completion. You can manage destinations through the **Nexly Live Dashboard** or by editing the config file directly.
+
+---
 
 ### Managing Cloud Destinations
 
-**Via Dashboard:** Open the Nexly Live Dashboard → Click the **☁️ CLOUD** button → Add/Remove destinations
+#### Method 1 — Via the Nexly Live Dashboard (Recommended)
 
-**Via Config File:** Edit `cloud-destinations.json` directly:
+The dashboard provides a visual interface for adding, testing, toggling, and removing cloud destinations — no command line required.
+
+##### Step 1: Open the Cloud Manager
+
+1. Navigate to `https://your.domain.com/live/` in your browser
+2. Log in with your HTTP basic auth credentials
+3. Click the **☁️ CLOUD** button in the top toolbar
+4. The **Cloud Storage Destinations** panel opens as a modal overlay
+
+##### Step 2: Add a New Destination
+
+> [!IMPORTANT]
+> Before adding a destination, you must first configure the Rclone remote for your cloud provider (see [Configuring Rclone Remotes](#configuring-rclone-remotes) below).
+
+In the Cloud panel, fill out the **Add New Destination** form:
+
+| Field | Description | Example |
+| :--- | :--- | :--- |
+| **Name** | A friendly display name for this destination | `My Google Drive` |
+| **Rclone Remote** | Select from auto-detected configured remotes (dropdown) | `gdrive` |
+| **Remote Path** | Folder on the remote to upload into (created automatically) | `Aria2Downloads` |
+
+Click **`+ Add Destination`** to save. The destination is **enabled by default** and will immediately receive new completed downloads.
+
+##### Step 3: Manage Existing Destinations
+
+Each destination card shows its status and provides action buttons:
+
+| Button | Action |
+| :--- | :--- |
+| **● ON / ○ OFF** | Toggle the destination on/off without deleting it |
+| **TEST** | Verify connectivity — checks if Rclone can reach the remote and path |
+| **✕** | Delete the destination permanently (with confirmation prompt) |
+
+> [!TIP]
+> Use the **TEST** button after adding a new destination to confirm it's properly connected before any downloads start uploading.
+
+---
+
+#### Method 2 — Via Config File
+
+For advanced users or headless/automated setups, edit `cloud-destinations.json` directly:
+
+```bash
+nano cloud-destinations.json
+```
+
+##### Configuration Structure
 
 ```json
 {
@@ -492,22 +541,128 @@ Downloads are **automatically uploaded** to all enabled cloud destinations on co
 }
 ```
 
-### Adding a New Cloud Provider
+##### Field Reference
+
+| Field | Type | Required | Description |
+| :--- | :---: | :---: | :--- |
+| `id` | string | ✅ | Unique identifier (lowercase, hyphens only) |
+| `name` | string | ✅ | Display name shown in the dashboard |
+| `remote` | string | ✅ | Rclone remote name (must match `rclone config` entry) |
+| `path` | string | ❌ | Subdirectory on the remote (empty = root) |
+| `enabled` | boolean | ✅ | `true` to upload, `false` to skip |
+| `icon` | string | ❌ | Emoji icon for dashboard display (default: `☁️`) |
+
+> [!NOTE]
+> When adding via the Dashboard UI, the `id` is auto-generated from the name + timestamp. When editing the file manually, ensure each `id` is unique.
+
+---
+
+### Configuring Rclone Remotes
+
+Before a cloud destination can be used, the underlying Rclone remote must be configured:
 
 ```bash
-# 1. Configure the remote in Rclone
+# Launch the interactive Rclone config wizard
 docker exec -it rclone rclone config
-
-# 2. Add destination via Dashboard → ☁️ CLOUD → Add Destination
-#    Or add manually to cloud-destinations.json
-
-# 3. Test the remote
-docker exec rclone rclone lsd <remote-name>:
 ```
+
+This walks you through provider-specific setup (OAuth, API keys, etc.). Common provider options:
+
+| Step | What Rclone asks | What to enter |
+| :--- | :--- | :--- |
+| `name>` | Remote name | e.g., `gdrive`, `onedrive`, `dropbox` |
+| `Storage>` | Provider type | e.g., `drive`, `onedrive`, `dropbox`, `s3` |
+| Auth | OAuth login or API keys | Follow the provider-specific prompts |
+
+After completing the wizard, verify the remote:
+
+```bash
+# List remote root directories
+docker exec rclone rclone lsd <remote-name>:
+
+# Check storage usage
+docker exec rclone rclone about <remote-name>:
+```
+
+---
+
+### Example: Adding Multiple Cloud Providers
+
+Here is a full workflow for adding Google Drive and Dropbox alongside an existing OneDrive:
+
+```bash
+# 1. Configure Google Drive remote
+docker exec -it rclone rclone config
+#    → name: gdrive
+#    → Storage: drive
+#    → Follow OAuth prompts
+
+# 2. Configure Dropbox remote
+docker exec -it rclone rclone config
+#    → name: dropbox
+#    → Storage: dropbox
+#    → Follow OAuth prompts
+
+# 3. Verify both remotes work
+docker exec rclone rclone lsd gdrive:
+docker exec rclone rclone lsd dropbox:
+
+# 4. Add destinations via Dashboard:
+#    → Open https://your.domain.com/live/
+#    → Click ☁️ CLOUD
+#    → Add "Google Drive (Backup)" → remote: gdrive → path: Aria2Downloads
+#    → Add "Dropbox (Archive)" → remote: dropbox → path: Downloads
+#    → Click TEST on each to verify connectivity
+```
+
+Or add them manually to `cloud-destinations.json`:
+
+```json
+{
+  "destinations": [
+    {
+      "id": "onedrive-main",
+      "name": "OneDrive (Main)",
+      "remote": "onedrive",
+      "path": "Aria2Downloads",
+      "enabled": true,
+      "icon": "💎"
+    },
+    {
+      "id": "gdrive-backup",
+      "name": "Google Drive (Backup)",
+      "remote": "gdrive",
+      "path": "Aria2Downloads",
+      "enabled": true,
+      "icon": "📁"
+    },
+    {
+      "id": "dropbox-archive",
+      "name": "Dropbox (Archive)",
+      "remote": "dropbox",
+      "path": "Downloads",
+      "enabled": true,
+      "icon": "📦"
+    }
+  ]
+}
+```
+
+---
 
 ### Supported Providers
 
 > OneDrive · Google Drive · Dropbox · MEGA · Amazon S3 · Backblaze B2 · Wasabi · Azure Blob · Google Cloud Storage · DigitalOcean Spaces · MinIO · FTP/SFTP · WebDAV · Box · pCloud · Yandex Disk · and [70+ more via Rclone](https://rclone.org/overview/)
+
+### Troubleshooting Cloud Uploads
+
+| Issue | Solution |
+| :--- | :--- |
+| **TEST shows "Failed to connect"** | Run `docker exec -it rclone rclone config reconnect <remote>:` to re-authenticate |
+| **Uploads not starting** | Check the destination is **enabled** (● ON) in the Cloud panel |
+| **OAuth token expired** | Re-authorize: `docker exec -it rclone rclone config reconnect <remote>:` |
+| **Remote path doesn't exist** | The upload script creates folders automatically — verify remote name matches exactly |
+| **Uploads slow or timing out** | Check server bandwidth; consider adding `--transfers 2` flags in `script.conf` |
 
 ---
 
@@ -669,14 +824,14 @@ Aria-Ariang-Server/
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ```
-MIT License • Copyright (c) 2015-2026 Akai
+MIT License • Copyright (c) 2015-2026 ABDURRAHMAN
 ```
 
 ---
 
 <div align="center">
 
-**Built with ❤️ by [Akai](https://github.com/Akai-Abd)**
+**Built with ❤️ by [ABDURRAHMAN](https://github.com/Akai-Abd)**
 
 ⭐ **Star this repo** if you find it useful!
 
