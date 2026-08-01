@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/banner.png" alt="Aria-AriaNg Server - Self-Hosted Download Station with Multi-Cloud Sync" width="100%" style="border-radius: 12px; margin-bottom: 15px;" />
+
 # 🚀 Aria-AriaNg Server
 
 ### **Self-Hosted Download Station with Multi-Cloud Sync**
