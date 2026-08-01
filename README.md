@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.png" alt="Aria-AriaNg Server - Self-Hosted Download Station with Multi-Cloud Sync" width="100%" style="border-radius: 12px; margin-bottom: 15px;" />
+<img src="assets/banner.png" alt="Aria-AriaNg Server - Self-Hosted Download Station with Multi-Cloud Sync" width="100%" style="border-radius: 12px; margin-bottom: 20px;" />
 
 # 🚀 Aria-AriaNg Server
 
@@ -10,7 +10,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)](docker-compose.yml)
 [![Aria2](https://img.shields.io/badge/Aria2-Pro-FF6600?style=for-the-badge&logo=aria2&logoColor=white)](https://aria2.github.io/)
 [![Nginx](https://img.shields.io/badge/Nginx-Reverse%20Proxy-009639?style=for-the-badge&logo=nginx&logoColor=white)](aria2-nginx.conf)
-[![Oracle Cloud](https://img.shields.io/badge/Oracle-Cloud%20VPS-F80000?style=for-the-badge&logo=oracle&logoColor=white)](#-deploy-on-oracle-cloud-vps)
+[![Oracle Cloud](https://img.shields.io/badge/Oracle-Cloud%20VPS-F80000?style=for-the-badge&logo=oracle&logoColor=white)](#deploy-on-oracle-cloud-vps)
 
 <br/>
 
@@ -20,11 +20,11 @@
 
 <br/>
 
-![Docker](https://img.shields.io/badge/Platform-Docker-informational?style=flat-square&color=0db7ed)
-![Node.js](https://img.shields.io/badge/Dashboard-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)
-![Rclone](https://img.shields.io/badge/Cloud_Sync-Rclone-3b82f6?style=flat-square)
-![SSL](https://img.shields.io/badge/SSL-Let's%20Encrypt-FFD700?style=flat-square&logo=letsencrypt&logoColor=black)
-![Status](https://img.shields.io/badge/Status-Production%20Ready-22c55e?style=flat-square)
+[![Docker](https://img.shields.io/badge/Platform-Docker-informational?style=flat-square&logo=docker&logoColor=white&color=0db7ed)](https://www.docker.com/)
+[![Node.js](https://img.shields.io/badge/Dashboard-Node.js-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Rclone](https://img.shields.io/badge/Cloud_Sync-Rclone-3b82f6?style=flat-square&logo=rclone&logoColor=white)](https://rclone.org/)
+[![SSL](https://img.shields.io/badge/SSL-Let's%20Encrypt-FFD700?style=flat-square&logo=letsencrypt&logoColor=black)](https://letsencrypt.org/)
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-22c55e?style=flat-square)](#features)
 
 </div>
 
@@ -32,79 +32,80 @@
 
 ## 📑 Table of Contents
 
-- [✨ Features](#-features)
-- [🏗️ Architecture](#️-architecture)
-- [🧩 Stack Components](#-stack-components)
-- [🌐 Services & Access](#-services--access)
-- [📋 Prerequisites](#-prerequisites)
-- [⚡ Quick Start](#-quick-start)
-- [☁️ Deploy on Oracle Cloud VPS](#️-deploy-on-oracle-cloud-vps)
-- [☁️ Multi-Cloud Upload](#️-multi-cloud-upload)
-- [⚙️ Configuration Reference](#️-configuration-reference)
-- [🤖 Automated Features](#-automated-features)
-- [🔧 Maintenance & Commands](#-maintenance--commands)
-- [🛡️ Security](#️-security)
-- [🗂️ Project Structure](#️-project-structure)
-- [📜 License](#-license)
+- [✨ Features](#features)
+- [🏗️ Architecture](#architecture)
+- [🧩 Stack Components](#stack-components)
+- [🌐 Services & Access](#services--access)
+- [📋 Prerequisites](#prerequisites)
+- [⚡ Quick Start](#quick-start)
+- [☁️ Deploy on Oracle Cloud VPS](#deploy-on-oracle-cloud-vps)
+- [☁️ Multi-Cloud Upload](#multi-cloud-upload)
+- [⚙️ Configuration Reference](#configuration-reference)
+- [🤖 Automated Features](#automated-features)
+- [🔧 Maintenance & Commands](#maintenance--commands)
+- [🛡️ Security Architecture](#security-architecture)
+- [🗂️ Project Structure](#project-structure)
+- [📜 License](#license)
 
 ---
 
+<a id="features"></a>
 ## ✨ Features
 
 <table>
 <tr>
-<td>
+<td width="50%">
 
-🔽 **Multi-Protocol Downloads**
-> HTTP, HTTPS, FTP, SFTP, BitTorrent, Magnet Links — all managed through a single elegant web UI
-
-</td>
-<td>
-
-☁️ **Multi-Cloud Sync**
-> Auto-upload completed downloads to OneDrive, Google Drive, Dropbox, MEGA, S3, and 70+ providers
+### 🔽 Multi-Protocol Downloads
+> **HTTP, HTTPS, FTP, SFTP, BitTorrent & Magnet Links** — all managed effortlessly through a single high-performance web interface.
 
 </td>
-</tr>
-<tr>
-<td>
+<td width="50%">
 
-📊 **Real-Time Dashboard**
-> Live monitoring of downloads, uploads, server health, disk usage, and cloud capacity via WebSocket
-
-</td>
-<td>
-
-🔒 **SSL + Auth**
-> Auto-renewing Let's Encrypt certificates with HTTP basic authentication on all routes
+### ☁️ Multi-Cloud Sync
+> **Automatic Cloud Uploads** to OneDrive, Google Drive, Dropbox, MEGA, Amazon S3, and **70+ cloud providers** powered by Rclone.
 
 </td>
 </tr>
 <tr>
-<td>
+<td width="50%">
 
-🐳 **Fully Dockerized**
-> One-command deployment with Docker Compose — 7 services, zero manual setup
+### 📊 Real-Time Dashboard
+> **Live Monitoring Dashboard** with real-time download/upload speeds, active connections, server RAM/CPU, disk usage, and cloud capacity via WebSocket.
 
 </td>
-<td>
+<td width="50%">
 
-🧹 **Auto-Cleanup**
-> Removes `.aria2`, `.torrent`, empty directories, and temporary files after successful uploads
+### 🔒 Enterprise SSL + Auth
+> **Automated Let's Encrypt Certificates** with auto-renewal and mandatory HTTP Basic Authentication protecting all routes.
 
 </td>
 </tr>
 <tr>
-<td>
+<td width="50%">
 
-📡 **Auto BT Trackers**
-> BitTorrent tracker list refreshed daily from community-maintained sources
+### 🐳 Fully Dockerized Stack
+> **One-Command Deployment** with Docker Compose orchestrating 7 microservices with zero manual server configuration.
 
 </td>
-<td>
+<td width="50%">
 
-💾 **Auto-Backup**
-> Config files backed up to cloud storage daily at 3 AM automatically
+### 🧹 Automated Cleanup
+> **Post-Upload File Hygiene** automatically purges `.aria2` temp files, `.torrent` metadata, and empty directories upon cloud sync completion.
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 📡 Daily BT Tracker Updates
+> **Auto-Refreshing BitTorrent Trackers** updated daily at 4 AM from top community-maintained tracker repositories.
+
+</td>
+<td width="50%">
+
+### 💾 Cloud Config Backups
+> **Automated Disaster Recovery** backing up your system configuration files to cloud storage daily at 3 AM.
 
 </td>
 </tr>
@@ -112,6 +113,7 @@
 
 ---
 
+<a id="architecture"></a>
 ## 🏗️ Architecture
 
 ```
@@ -157,70 +159,72 @@
 
 ---
 
+<a id="stack-components"></a>
 ## 🧩 Stack Components
 
-| Component | Image | Purpose |
+| Component | Container Image | Primary Purpose |
 | :--- | :--- | :--- |
-| 🔽 **Aria2 Pro** | `p3terx/aria2-pro` (custom build) | High-performance download engine (HTTP/FTP/BT/Magnet) |
-| 🎨 **AriaNg** | Nginx static | Beautiful web frontend for Aria2 RPC control |
-| ☁️ **Rclone** | `rclone/rclone` | Multi-cloud sync engine for 70+ providers |
-| 📁 **FileBrowser** | `filebrowser/filebrowser` | Web-based file manager for downloads |
-| 🐳 **Portainer** | `portainer/portainer-ce:lts` | Docker container management UI |
-| 🌐 **Nginx** | `nginx:alpine` | Reverse proxy with SSL termination + auth |
-| 📊 **Nexly Dashboard** | Custom Node.js build | Real-time monitoring with cloud management |
-| 🔐 **Certbot** | `certbot/certbot` | Automatic Let's Encrypt SSL certificate renewal |
+| 🔽 **Aria2 Pro** | `p3terx/aria2-pro` | High-speed multi-threaded download engine |
+| 🎨 **AriaNg** | `nginx:alpine` (static) | Modern web GUI frontend for Aria2 RPC |
+| ☁️ **Rclone** | `rclone/rclone` | Multi-cloud transfer and sync engine |
+| 📁 **FileBrowser** | `filebrowser/filebrowser` | Web-based file manager & previewer |
+| 🐳 **Portainer** | `portainer/portainer-ce:lts` | Visual container management dashboard |
+| 🌐 **Nginx** | `nginx:alpine` | Reverse proxy, SSL termination & HTTP Basic Auth |
+| 📊 **Nexly Dashboard** | Custom Node.js | Real-time WebSocket monitoring & cloud manager |
+| 🔐 **Certbot** | `certbot/certbot` | Automated Let's Encrypt SSL certificate issuance |
 
 ---
 
+<a id="services--access"></a>
 ## 🌐 Services & Access
 
 > [!NOTE]
-> All routes are protected by HTTP basic auth (`.htpasswd`). HTTP automatically redirects to HTTPS.
+> All web routes are secured behind **HTTP Basic Authentication** (`.htpasswd`). Insecure HTTP requests on port 80 are automatically upgraded to **HTTPS** on port 443.
 
-| Service | Route | Port | Description |
-| :--- | :--- | :---: | :--- |
-| 🎨 **AriaNg** | `/` | 443 | Download management web UI |
-| ⚡ **Aria2 RPC** | `/jsonrpc` | 443 | WebSocket RPC endpoint (uses RPC secret, no basic auth) |
-| 📊 **Nexly Dashboard** | `/live/` | 443 | Real-time server & cloud monitoring |
-| 📁 **FileBrowser** | `/download/` | 443 | Web-based file manager |
-| 🐳 **Portainer** | `/portainer/` | 443 | Docker management UI |
-| ☁️ **Rclone Web GUI** | `/rclone/` | 443 | Cloud sync management |
+| Service | Public Route | Port | Authentication | Description |
+| :--- | :--- | :---: | :---: | :--- |
+| 🎨 **AriaNg Web UI** | `/` | `443` | Basic Auth | Complete download station control center |
+| ⚡ **Aria2 RPC Endpoint** | `/jsonrpc` | `443` | RPC Secret | WebSocket RPC API for desktop/mobile clients |
+| 📊 **Nexly Dashboard** | `/live/` | `443` | Basic Auth | Real-time server health & cloud destinations GUI |
+| 📁 **FileBrowser** | `/download/` | `443` | Basic Auth + Web UI | Direct file manager to browse & stream downloads |
+| 🐳 **Portainer UI** | `/portainer/` | `443` | Basic Auth + Portainer | Full Docker container & log management |
+| ☁️ **Rclone Web GUI** | `/rclone/` | `443` | Basic Auth + Rclone | Advanced cloud remote management |
 
 ---
 
+<a id="prerequisites"></a>
 ## 📋 Prerequisites
 
-Before installation, ensure you have:
-
-| Requirement | Minimum | Recommended |
+| Requirement | Minimum Specification | Recommended Specification |
 | :--- | :--- | :--- |
-| **OS** | Ubuntu 20.04 / Debian 11 | Ubuntu 22.04+ / Oracle Linux 8+ |
+| **Operating System** | Ubuntu 20.04 LTS / Debian 11 | Ubuntu 22.04 LTS / Oracle Linux 8+ |
 | **RAM** | 1 GB | 2 GB+ |
-| **Storage** | 20 GB | 50 GB+ SSD |
-| **Docker** | v20.10+ | Latest stable |
-| **Docker Compose** | v2.0+ | Latest stable |
-| **Domain** | Any domain with A record | DDNS supported |
-| **Ports** | 80, 443 open | — |
+| **Storage** | 20 GB free disk space | 50 GB+ High-speed NVMe SSD |
+| **Docker** | Engine v20.10+ | Latest Stable Docker Engine |
+| **Docker Compose** | v2.0+ | Latest Docker Compose Plugin |
+| **Domain Name** | Any domain with DNS `A Record` | Cloudflare / DDNS supported |
+| **Network Ports** | Ports `80` and `443` open | Standard HTTP/HTTPS inbound |
 
 ---
 
+<a id="quick-start"></a>
 ## ⚡ Quick Start
 
-### 1️⃣ Clone the Repository
+### <kbd>Step 1</kbd> — Clone the Repository
 
 ```bash
 git clone https://github.com/Akai-Abd/Aria-Ariang-Server.git
 cd Aria-Ariang-Server
 ```
 
-### 2️⃣ Configure Environment
+### <kbd>Step 2</kbd> — Configure Environment Variables
 
 ```bash
 cp .env.example .env
 nano .env
 ```
 
-Fill in your secrets:
+Set your secure credentials:
 
 ```env
 RPC_SECRET=your_secure_rpc_secret       # Aria2 RPC authentication token
@@ -228,23 +232,23 @@ RCLONE_USER=admin                        # Rclone Web GUI username
 RCLONE_PASS=your_secure_password         # Rclone Web GUI password
 FB_USER=admin                            # FileBrowser username
 FB_PASS=your_secure_password             # FileBrowser password
-TZ=Asia/Kolkata                          # Your timezone
-PUID=1001                                # User ID for file permissions
-PGID=1001                                # Group ID for file permissions
+TZ=Asia/Kolkata                          # Server timezone
+PUID=1001                                # File permission User ID
+PGID=1001                                # File permission Group ID
 DOMAIN=your.domain.com                   # Your domain name
 ```
 
-### 3️⃣ Set Up HTTP Basic Auth
+### <kbd>Step 3</kbd> — Set Up HTTP Basic Authentication
 
 ```bash
 # Install htpasswd utility
 sudo apt install apache2-utils -y
 
-# Generate password file (replace 'admin' and 'yourpassword')
+# Generate password file
 htpasswd -cb .htpasswd admin yourpassword
 ```
 
-### 4️⃣ Generate Self-Signed SSL (Initial Setup)
+### <kbd>Step 4</kbd> — Generate Initial Self-Signed SSL
 
 ```bash
 mkdir -p certs
@@ -255,270 +259,151 @@ openssl req -x509 -nodes -days 365 \
   -subj "/CN=your.domain.com"
 ```
 
-### 5️⃣ Build & Launch
+### <kbd>Step 5</kbd> — Build & Launch Services
 
 ```bash
 docker compose up -d --build
 ```
 
-### 6️⃣ Set Up Let's Encrypt SSL (Production)
+### <kbd>Step 6</kbd> — Issue Production Let's Encrypt SSL
 
 ```bash
-# Obtain real SSL certificate
+# Obtain official SSL certificate via Certbot
 docker compose run --rm certbot certonly \
   --webroot -w /var/www/certbot \
   -d your.domain.com \
   --email your@email.com \
   --agree-tos --no-eff-email
 
-# Update nginx config to use Let's Encrypt certs
-# Change ssl_certificate paths in aria2-nginx.conf to:
+# Update Nginx config to point to Let's Encrypt certificates
+nano aria2-nginx.conf
+# Set:
 #   ssl_certificate /etc/letsencrypt/live/your.domain.com/fullchain.pem;
 #   ssl_certificate_key /etc/letsencrypt/live/your.domain.com/privkey.pem;
 
-# Restart nginx to apply
+# Reload Nginx
 docker compose restart nginx-proxy
 ```
 
-### 7️⃣ Configure Cloud Sync
+### <kbd>Step 7</kbd> — Verify Deployment Status
 
 ```bash
-# Set up Rclone remote (interactive wizard)
-docker exec -it rclone rclone config
-
-# Edit cloud destinations
-nano cloud-destinations.json
-```
-
-### ✅ Verify Installation
-
-```bash
-# Check all services are running
+# Check container status
 docker compose ps
 
-# Run the health check dashboard
+# Run health check diagnostic
 bash check.sh
 ```
 
 ---
 
+<a id="deploy-on-oracle-cloud-vps"></a>
 ## ☁️ Deploy on Oracle Cloud VPS
 
 > [!IMPORTANT]
-> Oracle Cloud offers an **Always Free** tier with ARM-based VMs (4 OCPU, 24 GB RAM) — perfect for running this entire stack.
+> Oracle Cloud Infrastructure (OCI) offers an **Always Free** tier with ARM-based `VM.Standard.A1.Flex` instances (4 OCPUs, 24 GB RAM, 200 GB Storage) — ideal for hosting this entire suite.
 
-### Step 1 — Create an Oracle Cloud Instance
+### <kbd>Step 1</kbd> — Provision Oracle Cloud Instance
 
-1. Sign up at [cloud.oracle.com](https://cloud.oracle.com/)
+1. Log into [cloud.oracle.com](https://cloud.oracle.com/)
 2. Navigate to **Compute → Instances → Create Instance**
-3. Choose the following settings:
+3. Configure the VM specifications:
+   - **Image**: Ubuntu 22.04 Minimal or Oracle Linux 8
+   - **Shape**: `VM.Standard.A1.Flex` (ARM Always Free)
+   - **OCPUs**: `2` to `4` OCPUs
+   - **Memory**: `6 GB` to `24 GB` RAM
+   - **Boot Volume**: `50 GB` or higher
+4. Download your SSH private key (`.key`/`.pem`).
 
-   | Setting | Value |
-   | :--- | :--- |
-   | **Image** | Ubuntu 22.04 (or Oracle Linux 8) |
-   | **Shape** | `VM.Standard.A1.Flex` (ARM — Always Free) |
-   | **OCPUs** | 2–4 |
-   | **Memory** | 6–24 GB |
-   | **Boot Volume** | 50 GB+ |
-
-4. Download your SSH key pair during creation
-5. Note down the **Public IP** of the instance
-
-### Step 2 — Configure Oracle Cloud Networking
+### <kbd>Step 2</kbd> — Configure Oracle Cloud Security Rules
 
 > [!WARNING]
-> Oracle Cloud uses **Security Lists** (not just iptables). You must open ports in **both** the VCN Security List and OS firewall.
+> Oracle Cloud requires port permissions in **both** the Virtual Cloud Network (VCN) Security List **and** the instance's local `iptables` firewall.
 
-#### 2a. Open Ports in VCN Security List
+#### 2a. VCN Ingress Rules (Oracle Web Console)
+Navigate to **VCN → Security Lists → Default Security List** and add the following ingress rules:
 
-1. Go to **Networking → Virtual Cloud Networks → Your VCN**
-2. Click **Security Lists → Default Security List**
-3. **Add Ingress Rules:**
+| Source | IP Protocol | Destination Port | Description |
+| :--- | :---: | :---: | :--- |
+| `0.0.0.0/0` | TCP | `80` | HTTP traffic (Certbot SSL validation) |
+| `0.0.0.0/0` | TCP | `443` | HTTPS encrypted traffic |
 
-   | Source CIDR | Protocol | Dest Port | Description |
-   | :--- | :--- | :--- | :--- |
-   | `0.0.0.0/0` | TCP | 80 | HTTP |
-   | `0.0.0.0/0` | TCP | 443 | HTTPS |
-
-#### 2b. Open OS Firewall (iptables)
+#### 2b. Instance OS Firewall Rules (Terminal)
 
 ```bash
-# SSH into your instance
-ssh -i your-key.pem ubuntu@<PUBLIC_IP>
+# SSH into your Oracle Cloud VPS instance
+ssh -i your-key.pem ubuntu@<YOUR_ORACLE_PUBLIC_IP>
 
-# Open ports 80 and 443
+# Open HTTP and HTTPS ports in iptables
 sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
 sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
 
-# Save iptables rules permanently
+# Save rules permanently
 sudo netfilter-persistent save
 sudo netfilter-persistent reload
 ```
 
-### Step 3 — Install Docker
+### <kbd>Step 3</kbd> — Install Docker & Deploy Stack
 
 ```bash
-# Update system packages
-sudo apt update && sudo apt upgrade -y
-
-# Install Docker
+# Install Docker via convenience script
 curl -fsSL https://get.docker.com | sudo sh
-
-# Add your user to docker group
 sudo usermod -aG docker $USER
-
-# Apply group changes (or log out and back in)
 newgrp docker
 
-# Verify installation
-docker --version
-docker compose version
-```
-
-### Step 4 — Clone & Configure
-
-```bash
-# Clone the repository
+# Clone repository and deploy
 git clone https://github.com/Akai-Abd/Aria-Ariang-Server.git
 cd Aria-Ariang-Server
-
-# Configure environment
 cp .env.example .env
-nano .env
 
-# Set up HTTP basic auth
-sudo apt install apache2-utils -y
-htpasswd -cb .htpasswd admin yourpassword
-
-# Generate initial self-signed SSL
-mkdir -p certs
-openssl req -x509 -nodes -days 365 \
-  -newkey rsa:2048 \
-  -keyout certs/aria2.key \
-  -out certs/aria2.pem \
-  -subj "/CN=your.domain.com"
-```
-
-### Step 5 — Point Your Domain
-
-Set up a DNS **A record** pointing your domain to the Oracle Cloud instance's **Public IP**:
-
-| Type | Host | Value | TTL |
-| :--- | :--- | :--- | :--- |
-| A | `@` or `nexly` | `YOUR_PUBLIC_IP` | 300 |
-
-> [!TIP]
-> If you use a free DDNS service (e.g., DuckDNS, dpdns.org), update the IP accordingly.
-
-### Step 6 — Deploy & Get SSL
-
-```bash
-# Build and start all services
+# Start stack
 docker compose up -d --build
-
-# Wait for nginx to start, then get Let's Encrypt SSL
-docker compose run --rm certbot certonly \
-  --webroot -w /var/www/certbot \
-  -d your.domain.com \
-  --email your@email.com \
-  --agree-tos --no-eff-email
-
-# Update nginx config to use Let's Encrypt certs
-# Edit aria2-nginx.conf — change ssl_certificate lines to:
-#   ssl_certificate /etc/letsencrypt/live/your.domain.com/fullchain.pem;
-#   ssl_certificate_key /etc/letsencrypt/live/your.domain.com/privkey.pem;
-nano aria2-nginx.conf
-
-# Restart nginx to load new certs
-docker compose restart nginx-proxy
 ```
-
-### Step 7 — Set Up Rclone Cloud Sync
-
-```bash
-# Configure Rclone for your cloud provider
-docker exec -it rclone rclone config
-
-# Verify the remote works
-docker exec rclone rclone lsd onedrive:
-```
-
-### Step 8 — Verify Deployment
-
-```bash
-# Check all containers are healthy
-docker compose ps
-
-# Run the health check dashboard
-bash check.sh
-
-# Test HTTPS access
-curl -Ik https://your.domain.com
-```
-
-> [!TIP]
-> **Oracle Cloud Free Tier limits**: The Always Free ARM instance is more than enough for personal use. For heavy BitTorrent workloads, consider the paid `VM.Standard.E4.Flex` shape.
 
 ---
 
+<a id="multi-cloud-upload"></a>
 ## ☁️ Multi-Cloud Upload
 
-Downloads are **automatically uploaded** to all enabled cloud destinations on completion. You can manage destinations through the **Nexly Live Dashboard** or by editing the config file directly.
+Completed downloads are **automatically uploaded** to all active cloud destinations. Manage destinations effortlessly via the **Nexly Live Dashboard UI** or through configuration files.
 
 ---
 
-### Managing Cloud Destinations
+### Managing Destinations via Nexly Dashboard
 
-#### Method 1 — Via the Nexly Live Dashboard (Recommended)
-
-The dashboard provides a visual interface for adding, testing, toggling, and removing cloud destinations — no command line required.
-
-##### Step 1: Open the Cloud Manager
-
-1. Navigate to `https://your.domain.com/live/` in your browser
-2. Log in with your HTTP basic auth credentials
-3. Click the **☁️ CLOUD** button in the top toolbar
-4. The **Cloud Storage Destinations** panel opens as a modal overlay
-
-##### Step 2: Add a New Destination
-
-> [!IMPORTANT]
-> Before adding a destination, you must first configure the Rclone remote for your cloud provider (see [Configuring Rclone Remotes](#configuring-rclone-remotes) below).
-
-In the Cloud panel, fill out the **Add New Destination** form:
-
-| Field | Description | Example |
-| :--- | :--- | :--- |
-| **Name** | A friendly display name for this destination | `My Google Drive` |
-| **Rclone Remote** | Select from auto-detected configured remotes (dropdown) | `gdrive` |
-| **Remote Path** | Folder on the remote to upload into (created automatically) | `Aria2Downloads` |
-
-Click **`+ Add Destination`** to save. The destination is **enabled by default** and will immediately receive new completed downloads.
-
-##### Step 3: Manage Existing Destinations
-
-Each destination card shows its status and provides action buttons:
-
-| Button | Action |
-| :--- | :--- |
-| **● ON / ○ OFF** | Toggle the destination on/off without deleting it |
-| **TEST** | Verify connectivity — checks if Rclone can reach the remote and path |
-| **✕** | Delete the destination permanently (with confirmation prompt) |
-
-> [!TIP]
-> Use the **TEST** button after adding a new destination to confirm it's properly connected before any downloads start uploading.
-
----
-
-#### Method 2 — Via Config File
-
-For advanced users or headless/automated setups, edit `cloud-destinations.json` directly:
-
-```bash
-nano cloud-destinations.json
+```
+┌───────────────────────────────────────────────────────────────────────────┐
+│                        NEXLY LIVE DASHBOARD UI                            │
+│  [ 📊 Metrics ]   [ ⚡ Aria2 ]   [ 📁 Downloads ]   [ ☁️ CLOUD MANAGER ]    │
+└───────────────────────────────────────────────────────────────────────────┘
 ```
 
-##### Configuration Structure
+#### 1️⃣ Open Cloud Manager
+1. Access `https://your.domain.com/live/` in your browser.
+2. Enter your HTTP Basic Auth credentials.
+3. Click **`☁️ CLOUD`** in the top navigation bar to launch the modal panel.
+
+#### 2️⃣ Add a Destination
+1. Ensure your Rclone remote is already configured via `docker exec -it rclone rclone config`.
+2. Fill in the destination details:
+   - **Name**: Display label (e.g., `Google Drive Backup`)
+   - **Rclone Remote**: Select configured remote from dropdown
+   - **Remote Path**: Subfolder path (e.g., `Aria2Downloads`)
+3. Click **`+ Add Destination`**.
+
+#### 3️⃣ Interactive Management Controls
+
+| Action | Control | Function |
+| :--- | :---: | :--- |
+| **Toggle Status** | `● ON` / `○ OFF` | Instantly enable or pause uploads to this destination |
+| **Verify Connection** | `TEST` | Test Rclone remote reachability and write permissions |
+| **Remove Destination** | `✕` | Delete destination configuration safely |
+
+---
+
+### Managing Destinations via Config File
+
+Edit `cloud-destinations.json` directly:
 
 ```json
 {
@@ -543,287 +428,148 @@ nano cloud-destinations.json
 }
 ```
 
-##### Field Reference
-
-| Field | Type | Required | Description |
-| :--- | :---: | :---: | :--- |
-| `id` | string | ✅ | Unique identifier (lowercase, hyphens only) |
-| `name` | string | ✅ | Display name shown in the dashboard |
-| `remote` | string | ✅ | Rclone remote name (must match `rclone config` entry) |
-| `path` | string | ❌ | Subdirectory on the remote (empty = root) |
-| `enabled` | boolean | ✅ | `true` to upload, `false` to skip |
-| `icon` | string | ❌ | Emoji icon for dashboard display (default: `☁️`) |
-
-> [!NOTE]
-> When adding via the Dashboard UI, the `id` is auto-generated from the name + timestamp. When editing the file manually, ensure each `id` is unique.
-
 ---
 
-### Configuring Rclone Remotes
+### Supported Cloud Providers
 
-Before a cloud destination can be used, the underlying Rclone remote must be configured:
-
-```bash
-# Launch the interactive Rclone config wizard
-docker exec -it rclone rclone config
 ```
-
-This walks you through provider-specific setup (OAuth, API keys, etc.). Common provider options:
-
-| Step | What Rclone asks | What to enter |
-| :--- | :--- | :--- |
-| `name>` | Remote name | e.g., `gdrive`, `onedrive`, `dropbox` |
-| `Storage>` | Provider type | e.g., `drive`, `onedrive`, `dropbox`, `s3` |
-| Auth | OAuth login or API keys | Follow the provider-specific prompts |
-
-After completing the wizard, verify the remote:
-
-```bash
-# List remote root directories
-docker exec rclone rclone lsd <remote-name>:
-
-# Check storage usage
-docker exec rclone rclone about <remote-name>:
+  OneDrive  │  Google Drive  │  Dropbox  │  MEGA  │  Amazon S3  │  Backblaze B2
+  Wasabi    │  Azure Blob    │  GCS      │  MinIO │  DigitalOcean │  FTP/SFTP
+  WebDAV    │  Box           │  pCloud   │  Yandex Disk  │ + 70 More via Rclone
 ```
 
 ---
 
-### Example: Adding Multiple Cloud Providers
-
-Here is a full workflow for adding Google Drive and Dropbox alongside an existing OneDrive:
-
-```bash
-# 1. Configure Google Drive remote
-docker exec -it rclone rclone config
-#    → name: gdrive
-#    → Storage: drive
-#    → Follow OAuth prompts
-
-# 2. Configure Dropbox remote
-docker exec -it rclone rclone config
-#    → name: dropbox
-#    → Storage: dropbox
-#    → Follow OAuth prompts
-
-# 3. Verify both remotes work
-docker exec rclone rclone lsd gdrive:
-docker exec rclone rclone lsd dropbox:
-
-# 4. Add destinations via Dashboard:
-#    → Open https://your.domain.com/live/
-#    → Click ☁️ CLOUD
-#    → Add "Google Drive (Backup)" → remote: gdrive → path: Aria2Downloads
-#    → Add "Dropbox (Archive)" → remote: dropbox → path: Downloads
-#    → Click TEST on each to verify connectivity
-```
-
-Or add them manually to `cloud-destinations.json`:
-
-```json
-{
-  "destinations": [
-    {
-      "id": "onedrive-main",
-      "name": "OneDrive (Main)",
-      "remote": "onedrive",
-      "path": "Aria2Downloads",
-      "enabled": true,
-      "icon": "💎"
-    },
-    {
-      "id": "gdrive-backup",
-      "name": "Google Drive (Backup)",
-      "remote": "gdrive",
-      "path": "Aria2Downloads",
-      "enabled": true,
-      "icon": "📁"
-    },
-    {
-      "id": "dropbox-archive",
-      "name": "Dropbox (Archive)",
-      "remote": "dropbox",
-      "path": "Downloads",
-      "enabled": true,
-      "icon": "📦"
-    }
-  ]
-}
-```
-
----
-
-### Supported Providers
-
-> OneDrive · Google Drive · Dropbox · MEGA · Amazon S3 · Backblaze B2 · Wasabi · Azure Blob · Google Cloud Storage · DigitalOcean Spaces · MinIO · FTP/SFTP · WebDAV · Box · pCloud · Yandex Disk · and [70+ more via Rclone](https://rclone.org/overview/)
-
-### Troubleshooting Cloud Uploads
-
-| Issue | Solution |
-| :--- | :--- |
-| **TEST shows "Failed to connect"** | Run `docker exec -it rclone rclone config reconnect <remote>:` to re-authenticate |
-| **Uploads not starting** | Check the destination is **enabled** (● ON) in the Cloud panel |
-| **OAuth token expired** | Re-authorize: `docker exec -it rclone rclone config reconnect <remote>:` |
-| **Remote path doesn't exist** | The upload script creates folders automatically — verify remote name matches exactly |
-| **Uploads slow or timing out** | Check server bandwidth; consider adding `--transfers 2` flags in `script.conf` |
-
----
-
+<a id="configuration-reference"></a>
 ## ⚙️ Configuration Reference
 
-| File | Purpose | Sensitive |
+| File Path | Description | Contains Secrets |
 | :--- | :--- | :---: |
-| `.env` | All secrets (RPC, passwords, credentials) | ✅ |
-| `docker-compose.yml` | Service orchestration & volumes | ❌ |
-| `aria2-nginx.conf` | Reverse proxy, SSL, auth routing | ❌ |
-| `aria2/aria2.conf` | Download engine tuning (speeds, limits, BT) | ❌ |
-| `cloud-destinations.json` | Multi-cloud upload targets | ❌ |
-| `script.conf` | Upload/cleanup behavior settings | ❌ |
-| `settings.json` | FileBrowser configuration | ❌ |
-| `rclone/rclone.conf` | Cloud provider OAuth tokens | ✅ |
-| `.htpasswd` | HTTP basic auth credentials | ✅ |
-| `Dockerfile.aria2` | Custom Aria2 image with cron | ❌ |
-| `check.sh` | System health check dashboard script | ❌ |
-
-### Environment Variables
-
-| Variable | Description | Default |
-| :--- | :--- | :--- |
-| `RPC_SECRET` | Aria2 RPC authentication token | `changeme` |
-| `RCLONE_USER` | Rclone Web GUI username | `admin` |
-| `RCLONE_PASS` | Rclone Web GUI password | `changeme` |
-| `FB_USER` | FileBrowser username | `admin` |
-| `FB_PASS` | FileBrowser password | `changeme` |
-| `TZ` | Server timezone | `Asia/Kolkata` |
-| `PUID` | User ID for file permissions | `1001` |
-| `PGID` | Group ID for file permissions | `1001` |
-| `DOMAIN` | Your server domain name | `nexly.dpdns.org` |
+| `.env` | Global environment variables & credentials | 🔒 Yes |
+| `docker-compose.yml` | Multi-container Docker orchestration manifest | 🌐 No |
+| `aria2-nginx.conf` | Nginx reverse proxy, SSL termination & auth routing | 🌐 No |
+| `aria2/aria2.conf` | Aria2 download engine settings & speed limits | 🌐 No |
+| `cloud-destinations.json` | Multi-cloud sync target definitions | 🌐 No |
+| `script.conf` | Post-download upload and cleanup rules | 🌐 No |
+| `rclone/rclone.conf` | Rclone cloud provider tokens and credentials | 🔒 Yes |
 
 ---
 
+<a id="automated-features"></a>
 ## 🤖 Automated Features
 
-| Feature | Schedule | Description |
+| Automation Task | Frequency / Trigger | Description |
 | :--- | :--- | :--- |
-| 🔼 **Auto-Upload** | On download complete | Completed downloads → all enabled cloud destinations |
-| 🧹 **Auto-Cleanup** | On upload complete | Removes `.aria2`, `.torrent`, empty dirs after upload |
-| 📡 **Auto-Tracker** | Daily at 4:00 AM | BT tracker list refreshed from community sources |
-| 💾 **Auto-Backup** | Daily at 3:00 AM | Config files backed up to OneDrive |
-| 📜 **Log Rotation** | On 1 MB threshold | Upload logs rotate, keeps 3 archives |
-| ❤️ **Health Checks** | Every 30 seconds | All containers monitored, auto-restart on failure |
-| 🔐 **SSL Renewal** | Every 12 hours | Certbot checks & renews Let's Encrypt certs |
+| 🔼 **Multi-Cloud Upload** | Immediately on download finish | Uploads files to all enabled cloud remotes |
+| 🧹 **Post-Upload Cleanup** | Post-upload completion | Deletes temporary `.aria2` files & empty folders |
+| 📡 **BT Tracker Updates** | Daily at 4:00 AM | Downloads latest BitTorrent tracker lists |
+| 💾 **Config Cloud Backup** | Daily at 3:00 AM | Backs up server configuration to cloud storage |
+| 🔐 **SSL Auto-Renewal** | Every 12 Hours | Certbot checks & renews Let's Encrypt certificates |
+| ❤️ **Health Monitor** | Every 30 Seconds | Monitors container health & auto-recovers failed tasks |
 
 ---
 
+<a id="maintenance--commands"></a>
 ## 🔧 Maintenance & Commands
 
-### Container Management
+<details>
+<summary><b>🐳 Docker Container Operations</b></summary>
 
 ```bash
-# Start all services
-docker compose up -d --build
+# Start all microservices in background
+docker compose up -d
 
-# Stop all services
+# Stop all running containers
 docker compose down
 
 # Restart a specific service
 docker compose restart aria2-pro
 
-# View logs for a service
+# Stream real-time container logs
 docker compose logs -f aria2-pro
-
-# View all container statuses
-docker compose ps
 ```
+</details>
 
-### Rclone Operations
+<details>
+<summary><b>☁️ Rclone & Cloud Diagnostics</b></summary>
 
 ```bash
-# Check cloud storage usage
+# Check cloud storage quota
 docker exec rclone rclone about onedrive:
 
-# List files on cloud
-docker exec rclone rclone ls onedrive:/aria2-downloads
+# List remote directory contents
+docker exec rclone rclone lsd onedrive:
 
-# Manual upload
-docker exec rclone rclone copy /downloads/myfile onedrive:/aria2-downloads
-
-# Re-configure a remote
+# Run interactive Rclone setup
 docker exec -it rclone rclone config
 ```
+</details>
 
-### SSL Certificate
+<details>
+<summary><b>🔐 SSL & Diagnostics</b></summary>
 
 ```bash
-# Force SSL renewal
+# Check Let's Encrypt certificate status
+docker compose run --rm certbot certificates
+
+# Force SSL certificate renewal
 docker compose run --rm certbot renew --force-renewal
 
-# Check certificate expiry
-docker compose run --rm certbot certificates
-```
-
-### Health Check
-
-```bash
-# Run the system health dashboard
+# Run system diagnostic dashboard
 bash check.sh
 ```
+</details>
 
 ---
 
-## 🛡️ Security
+<a id="security-architecture"></a>
+## 🛡️ Security Architecture
 
-- 🔐 **HTTP Basic Auth** — All web routes protected via `.htpasswd`
-- 🔒 **HTTPS Only** — HTTP auto-redirects to HTTPS (port 80 → 443)
-- 🛡️ **SSL/TLS** — Auto-renewing Let's Encrypt certificates via Certbot
-- 🔑 **RPC Secret** — Aria2 RPC uses its own token-based authentication
-- 🚫 **No Exposed Ports** — Only ports 80 and 443 are published; all internal services communicate over a Docker bridge network
-- 📦 **Secrets in `.env`** — All credentials stored in `.env` (git-ignored)
-- 🔐 **OAuth Tokens** — Rclone config with OAuth tokens is git-ignored
+- 🔐 **HTTP Basic Auth**: All web routes are isolated behind htpasswd basic authentication.
+- 🔒 **Mandatory HTTPS**: Automatic HTTP to HTTPS redirection (Port 80 → Port 443).
+- 🔑 **Token-Based RPC**: Aria2 RPC uses isolated token-based secret keys (`RPC_SECRET`).
+- 🚫 **Isolated Internal Network**: Services communicate via isolated Docker bridge networks; only ports 80/443 are exposed publicly.
+- 🛡️ **Zero Secrets in Git**: Sensitive tokens in `.env` and `rclone.conf` are strictly git-ignored.
 
 ---
 
+<a id="project-structure"></a>
 ## 🗂️ Project Structure
 
 ```
 Aria-Ariang-Server/
-├── aria2/                      # Aria2 config & runtime
-│   ├── aria2.conf              # Download engine configuration
-│   └── script/                 # Aria2 event scripts
-├── ariang/                     # AriaNg web frontend (static files)
-├── certs/                      # SSL certificates (git-ignored)
-├── dashboard/                  # Nexly Live Dashboard (Node.js)
-│   ├── Dockerfile              # Dashboard container build
+├── assets/                     # README media assets & banners
+│   └── banner.png              # HD Transparent Hero Banner
+├── aria2/                      # Aria2 configuration & event hooks
+│   ├── aria2.conf              # Aria2 core config
+│   └── script/                 # Event trigger scripts
+├── ariang/                     # AriaNg static web frontend
+├── certs/                      # SSL certificates directory
+├── dashboard/                  # Nexly Live Monitoring Dashboard (Node.js)
 │   ├── server.js               # Express + Socket.io backend
-│   ├── public/                 # Frontend assets
-│   └── package.json            # Node.js dependencies
-├── downloads/                  # Download directory (git-ignored)
-├── rclone/                     # Rclone config (git-ignored)
-├── script/                     # Upload, cleanup, tracker & backup scripts
-│   ├── upload.sh               # Multi-cloud upload handler
-│   ├── clean.sh                # Post-upload cleanup
-│   ├── delete.sh               # Task deletion handler
-│   ├── tracker.sh              # BT tracker auto-updater
-│   ├── backup.sh               # Config backup to cloud
-│   └── core                    # Shared utility functions
-├── .env.example                # Environment template
-├── .gitignore                  # Git ignore rules
-├── .htpasswd                   # HTTP basic auth (git-ignored in practice)
-├── aria2-nginx.conf            # Nginx reverse proxy config
-├── check.sh                    # System health check dashboard
-├── cloud-destinations.json     # Multi-cloud upload targets
-├── docker-compose.yml          # Service orchestration
-├── Dockerfile.aria2            # Custom Aria2 image with cron jobs
-├── script.conf                 # Upload/cleanup behavior config
-├── settings.json               # FileBrowser configuration
+│   └── public/                 # Real-time Web UI assets
+├── downloads/                  # Storage volume for active & finished downloads
+├── rclone/                     # Rclone cloud configuration storage
+├── script/                     # Automated lifecycle scripts
+│   ├── upload.sh               # Cloud upload handler
+│   ├── clean.sh                # Post-upload cleanup handler
+│   ├── tracker.sh              # Daily BT tracker refresh
+│   └── backup.sh               # Cloud config backup script
+├── .env.example                # Environment variables template
+├── aria2-nginx.conf            # Nginx reverse proxy configuration
+├── check.sh                    # System health verification utility
+├── cloud-destinations.json     # Multi-cloud target list
+├── docker-compose.yml          # Docker Compose orchestration
 ├── LICENSE                     # MIT License
-└── README.md                   # This file
+└── README.md                   # Repository Documentation
 ```
 
 ---
 
+<a id="license"></a>
 ## 📜 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
 
 ```
 MIT License • Copyright (c) 2015-2026 ABDURRAHMAN
@@ -835,6 +581,6 @@ MIT License • Copyright (c) 2015-2026 ABDURRAHMAN
 
 **Built with ❤️ by [ABDURRAHMAN](https://github.com/Akai-Abd)**
 
-⭐ **Star this repo** if you find it useful!
+⭐ **Star this repository** if you find it helpful!
 
 </div>
