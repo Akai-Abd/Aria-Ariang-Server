@@ -33,3 +33,8 @@ aria2/rclone
 # Backups
 .backups/
 aria2/rclone.conf
+
+# Wiki temporary folders
+wiki/
+repo-wiki/
+
