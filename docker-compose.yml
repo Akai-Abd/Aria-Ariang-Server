@@ -72,7 +72,7 @@ services:
   portainer:
     image: portainer/portainer-ce:lts
     container_name: portainer
-    command: -H unix:///var/run/docker.sock
+    command: -H unix:///var/run/docker.sock -b /portainer/ --no-setup-token
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
