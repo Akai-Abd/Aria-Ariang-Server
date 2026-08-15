@@ -223,66 +223,37 @@
 <a id="quick-start"></a>
 ## ⚡ Quick Start
 
-### <kbd>Step 1</kbd> — Clone the Repository
+### Option 1: One-Command Automated Deployment (Recommended)
+
+On any fresh Ubuntu or Debian VPS:
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/Akai-Abd/Aria-Ariang-Server/main/deploy.sh | bash
+```
+
+---
+
+### Option 2: Fast Manual Setup with `setup.sh`
+
+```bash
+# 1. Clone the repository
 git clone https://github.com/Akai-Abd/Aria-Ariang-Server.git
 cd Aria-Ariang-Server
-```
 
-### <kbd>Step 2</kbd> — Configure Environment Variables
+# 2. Run pre-flight setup (pre-creates DBs, sets 775 permissions, generates certs)
+chmod +x setup.sh check.sh deploy.sh
+./setup.sh
 
-```bash
-cp .env.example .env
-nano .env
-```
-
-Set your secure credentials:
-
-```env
-RPC_SECRET=your_secure_rpc_secret       # Aria2 RPC authentication token
-RCLONE_USER=admin                        # Rclone Web GUI username
-RCLONE_PASS=your_secure_password         # Rclone Web GUI password
-FB_USER=admin                            # FileBrowser username
-FB_PASS=your_secure_password             # FileBrowser password
-TZ=Asia/Kolkata                          # Server timezone
-PUID=1001                                # File permission User ID
-PGID=1001                                # File permission Group ID
-DOMAIN=your.domain.com                   # Your domain name
-```
-
-### <kbd>Step 3</kbd> — Set Up HTTP Basic Authentication
-
-```bash
-# Install htpasswd utility
-sudo apt install apache2-utils -y
-
-# Generate password file
-htpasswd -cb .htpasswd admin yourpassword
-```
-
-### <kbd>Step 4</kbd> — Generate Initial Self-Signed SSL
-
-```bash
-mkdir -p certs
-openssl req -x509 -nodes -days 365 \
-  -newkey rsa:2048 \
-  -keyout certs/aria2.key \
-  -out certs/aria2.pem \
-  -subj "/CN=your.domain.com"
-```
-
-### <kbd>Step 5</kbd> — Launch Services
-
-```bash
+# 3. Launch stack
 docker compose up -d
 ```
 
 > Pre-built images are pulled automatically from [Docker Hub](https://hub.docker.com/u/baba2580). No `--build` flag needed.
 
-### <kbd>Step 6</kbd> — Issue Production Let's Encrypt SSL
+### <kbd>Step 4</kbd> — Issue Production Let's Encrypt SSL (Optional)
 
 ```bash
+
 # Obtain official SSL certificate via Certbot
 docker compose run --rm certbot certonly \
   --webroot -w /var/www/certbot \
@@ -551,22 +522,21 @@ sudo netfilter-persistent save
 sudo netfilter-persistent reload
 ```
 
-### <kbd>Step 3</kbd> — Install Docker & Deploy Stack
+### <kbd>Step 3</kbd> — Deploy Stack (1 Command)
 
 ```bash
-# Install Docker via convenience script
-curl -fsSL https://get.docker.com | sudo sh
-sudo usermod -aG docker $USER
-newgrp docker
+# Automated turnkey deployment on Oracle Cloud:
+curl -fsSL https://raw.githubusercontent.com/Akai-Abd/Aria-Ariang-Server/main/deploy.sh | bash
+```
 
-# Clone repository and deploy
+Or manually:
+```bash
 git clone https://github.com/Akai-Abd/Aria-Ariang-Server.git
 cd Aria-Ariang-Server
-cp .env.example .env
-
-# Start stack (pulls pre-built images from Docker Hub)
+./setup.sh
 docker compose up -d
 ```
+
 
 ---
 
@@ -863,16 +833,17 @@ Aria-Ariang-Server/
 │   ├── upload.sh               # Cloud upload handler
 │   ├── clean.sh                # Post-upload cleanup handler
 │   ├── tracker.sh              # Daily BT tracker refresh
-│   └── backup.sh               # Cloud config backup script
 ├── .env.example                # Environment variables template
 ├── aria2-nginx.conf            # Nginx reverse proxy configuration
 ├── check.sh                    # System health verification utility
 ├── cloud-destinations.json     # Multi-cloud target list
+├── deploy.sh                   # 1-command fresh VPS deployment script
 ├── DEPLOYMENT.md               # Step-by-step deployment guide
 ├── docker-compose.yml          # Docker Compose orchestration
 ├── Dockerfile.aria2            # Aria2 Pro container image definition
 ├── LICENSE                     # MIT License
 ├── MAINTENANCE_CHEAT_SHEET.md  # Server & Git sync cheat sheet
+├── setup.sh                    # Pre-flight initialization & permission fix script
 └── README.md                   # Repository Documentation
 ```
 
