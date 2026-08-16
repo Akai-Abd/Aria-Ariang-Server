@@ -113,9 +113,15 @@ DOMAIN=nexly.dpdns.org         # Your domain name
 ### Step 5 — Launch Everything
 
 ```bash
+# Remove dev override if present (uses local builds instead of Docker Hub)
+rm -f docker-compose.override.yml
+
 docker compose pull
 docker compose up -d
 ```
+
+> [!IMPORTANT]
+> If `docker-compose.override.yml` exists, it overrides Docker Hub image pulls with local builds — which will fail on a production server. The command above removes it before deploying.
 
 ---
 
@@ -133,11 +139,11 @@ docker compose ps
 #### Access Your Services:
 | Service | URL | Default Login |
 |:---|:---|:---|
-| **AriaNg** | `https://your.domain.com/` | `admin` / `(FB_PASS)` |
-| **Nexly Dashboard** | `https://your.domain.com/live/` | `admin` / `(FB_PASS)` |
-| **FileBrowser** | `https://your.domain.com/download/` | `admin` / `(FB_PASS)` |
+| **AriaNg** | `https://your.domain.com/` | `.htpasswd` credentials |
+| **Nexly Dashboard** | `https://your.domain.com/live/` | `.htpasswd` credentials |
+| **FileBrowser** | `https://your.domain.com/download/` | `FB_USER` / `FB_PASS` |
 | **Portainer** | `https://your.domain.com/portainer/` | Initial admin setup |
-| **Rclone Web UI** | `https://your.domain.com/rclone/` | `admin` / `(FB_PASS)` |
+| **Rclone Web UI** | `https://your.domain.com/rclone/` | `RCLONE_USER` / `RCLONE_PASS` |
 
 ---
 

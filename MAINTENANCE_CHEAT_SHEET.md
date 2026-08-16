@@ -25,7 +25,7 @@ git commit -m "feat: description of changes"
 git push
 
 # === 2. SERVER TERMINAL ===
-ssh ubuntu@152.67.89.254
+ssh ubuntu@YOUR_SERVER_IP
 cd ~/Aria-Ariang-Server
 git pull
 docker compose restart                      # Quick restart
@@ -41,7 +41,7 @@ git commit -m "fix: changes made on server"
 
 # === 2. LOCAL TERMINAL ===
 cd "/media/akai/NFORCE/Aria-Ariang Server"
-git fetch ubuntu@152.67.89.254:~/Aria-Ariang-Server main
+git fetch ubuntu@YOUR_SERVER_IP:~/Aria-Ariang-Server main
 git merge FETCH_HEAD
 git push
 
@@ -53,13 +53,13 @@ git fetch origin
 ### Workflow 3: Conflict Resolution (Stash Method)
 ```bash
 # On Server: Stash local edits
-ssh ubuntu@152.67.89.254 'cd ~/Aria-Ariang-Server && git stash'
+ssh ubuntu@YOUR_SERVER_IP 'cd ~/Aria-Ariang-Server && git stash'
 
 # On Local: Push your changes
 cd "/media/akai/NFORCE/Aria-Ariang Server" && git push
 
 # On Server: Pull & pop stash
-ssh ubuntu@152.67.89.254 'cd ~/Aria-Ariang-Server && git pull && git stash pop'
+ssh ubuntu@YOUR_SERVER_IP 'cd ~/Aria-Ariang-Server && git pull && git stash pop'
 ```
 
 ---
@@ -110,7 +110,7 @@ docker compose logs -f --tail=50 rclone
 docker exec -it rclone rclone listremotes --config="/config/rclone/rclone.conf"
 
 # View active upload queue stats & speed via Rclone API
-docker exec -it rclone rclone rc core/stats --rc-user="admin" --rc-pass="654550"
+docker exec -it rclone rclone rc core/stats --rc-user="${RCLONE_USER}" --rc-pass="${RCLONE_PASS}"
 
 # --- 🔍 STORAGE QUOTA CHECK BY CLOUD PROVIDER ---
 docker exec -it rclone rclone about gdrive: --config="/config/rclone/rclone.conf"     # Google Drive

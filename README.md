@@ -271,7 +271,7 @@ nano aria2-nginx.conf
 docker compose restart nginx-proxy
 ```
 
-### <kbd>Step 7</kbd> — Verify Deployment Status
+### <kbd>Step 5</kbd> — Verify Deployment Status
 
 ```bash
 # Check container status
@@ -833,6 +833,9 @@ Aria-Ariang-Server/
 │   ├── upload.sh               # Cloud upload handler
 │   ├── clean.sh                # Post-upload cleanup handler
 │   ├── tracker.sh              # Daily BT tracker refresh
+│   ├── backup.sh               # Config backup to cloud storage
+│   ├── delete.sh               # Safe file/folder deletion utility
+│   └── core                    # Shared shell library functions
 ├── .env.example                # Environment variables template
 ├── aria2-nginx.conf            # Nginx reverse proxy configuration
 ├── check.sh                    # System health verification utility
@@ -843,6 +846,8 @@ Aria-Ariang-Server/
 ├── Dockerfile.aria2            # Aria2 Pro container image definition
 ├── LICENSE                     # MIT License
 ├── MAINTENANCE_CHEAT_SHEET.md  # Server & Git sync cheat sheet
+├── script.conf                 # Post-download upload and cleanup rules
+├── settings.json               # FileBrowser configuration
 ├── setup.sh                    # Pre-flight initialization & permission fix script
 └── README.md                   # Repository Documentation
 ```
