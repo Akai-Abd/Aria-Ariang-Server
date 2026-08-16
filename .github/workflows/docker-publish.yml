@@ -16,6 +16,7 @@ jobs:
       contents: read
 
     strategy:
+      fail-fast: false
       matrix:
         include:
           - image: aria2-pro
@@ -69,6 +70,7 @@ jobs:
 
       - name: Update Docker Hub Description & Overview
         uses: peter-evans/dockerhub-description@v4
+        continue-on-error: true
         with:
           username: ${{ env.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
