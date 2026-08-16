@@ -935,9 +935,24 @@ token = {&quot;access_token&quot;:&quot;...&quot;}" style="width:100%; backgroun
             </div>
 
             <div class="log-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
                     <h2>Upload Log Stream</h2>
-                    <span style="font-size:10px; color:var(--text-dim);">TAILING...</span>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <button id="clear-logs-btn" style="
+                            padding: 2px 8px;
+                            background: rgba(255,0,85,0.12);
+                            border: 1px solid rgba(255,0,85,0.35);
+                            border-radius: 4px;
+                            color: #ff0055;
+                            font-size: 10px;
+                            font-family: 'Share Tech Mono', monospace;
+                            cursor: pointer;
+                            transition: all 0.2s;
+                        " onmouseover="this.style.background='rgba(255,0,85,0.25)';this.style.boxShadow='0 0 8px rgba(255,0,85,0.4)'"
+                           onmouseout="this.style.background='rgba(255,0,85,0.12)';this.style.boxShadow='none'"
+                           title="Permanently delete all upload logs">🗑️ CLEAR</button>
+                        <span style="font-size:10px; color:var(--text-dim);">TAILING...</span>
+                    </div>
                 </div>
                 <div id="log-container">
                     <div class="log-line" style="color: var(--text-dim)">Waiting for logs...</div>
@@ -1086,6 +1101,10 @@ token = {&quot;access_token&quot;:&quot;...&quot;}" style="width:100%; backgroun
             renderLogLine(line);
         });
 
+        socket.on('logs:cleared', () => {
+            elLogs.innerHTML = '<div class="log-line" style="color: var(--text-dim)">Logs cleared. Waiting for new logs...</div>';
+        });
+
         // Load logs immediately on page load / refresh
         fetch('./api/logs')
             .then(res => res.json())
@@ -1096,6 +1115,30 @@ token = {&quot;access_token&quot;:&quot;...&quot;}" style="width:100%; backgroun
                 }
             })
             .catch(() => {});
+
+        // Clear logs button handler
+        const elClearLogs = document.getElementById('clear-logs-btn');
+        if (elClearLogs) {
+            elClearLogs.addEventListener('click', async () => {
+                if (!confirm('Permanently delete all upload logs?')) return;
+                elClearLogs.disabled = true;
+                elClearLogs.textContent = '⏳ CLEARING...';
+                try {
+                    const res = await fetch('./api/logs', { method: 'DELETE' });
+                    const data = await res.json();
+                    if (data.success) {
+                        elLogs.innerHTML = '<div class="log-line" style="color: var(--text-dim)">Logs cleared. Waiting for new logs...</div>';
+                    } else {
+                        alert('Error: ' + (data.error || 'Failed to clear logs'));
+                    }
+                } catch (e) {
+                    alert('Failed to clear logs: ' + e.message);
+                } finally {
+                    elClearLogs.disabled = false;
+                    elClearLogs.textContent = '🗑️ CLEAR';
+                }
+            });
+        }
 
         socket.on('update', (data) => {
             const down = data.network.down;

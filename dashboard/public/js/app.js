@@ -203,6 +203,10 @@ socket.on('log', (line) => {
     renderLogLine(line);
 });
 
+socket.on('logs:cleared', () => {
+    elLogs.innerHTML = '<div class="log-line" style="color: var(--text-dim)">Logs cleared. Waiting for new logs...</div>';
+});
+
 // Load logs immediately on page load / refresh
 fetch('./api/logs')
     .then(res => res.json())
@@ -213,6 +217,30 @@ fetch('./api/logs')
         }
     })
     .catch(() => {});
+
+// Clear logs button handler
+const elClearLogs = document.getElementById('clear-logs-btn');
+if (elClearLogs) {
+    elClearLogs.addEventListener('click', async () => {
+        if (!confirm('Permanently delete all upload logs?')) return;
+        elClearLogs.disabled = true;
+        elClearLogs.textContent = '⏳ CLEARING...';
+        try {
+            const res = await fetch('./api/logs', { method: 'DELETE' });
+            const data = await res.json();
+            if (data.success) {
+                elLogs.innerHTML = '<div class="log-line" style="color: var(--text-dim)">Logs cleared. Waiting for new logs...</div>';
+            } else {
+                alert('Error: ' + (data.error || 'Failed to clear logs'));
+            }
+        } catch (e) {
+            alert('Failed to clear logs: ' + e.message);
+        } finally {
+            elClearLogs.disabled = false;
+            elClearLogs.textContent = '🗑️ CLEAR';
+        }
+    });
+}
 
 socket.on('update', (data) => {
     // Speed

@@ -93,7 +93,7 @@ services:
       - RCLONE_PASS=${RCLONE_PASS}
     volumes:
       - /proc:/host/proc:ro
-      - ./aria2/upload.log:/logs/upload.log:ro
+      - ./aria2/upload.log:/logs/upload.log:rw
       - ./downloads:/data:ro
       - /etc/os-release:/host/os-release:ro
       - ./cloud-destinations.json:/config/cloud-destinations.json:rw

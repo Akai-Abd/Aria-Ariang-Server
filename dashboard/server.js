@@ -746,6 +746,22 @@ app.get('/api/logs', (req, res) => {
     res.json({ logs: getRecentLogs(50) });
 });
 
+// API endpoint for permanently clearing logs
+app.delete('/api/logs', (req, res) => {
+    try {
+        if (fs.existsSync(LOG_FILE)) {
+            fs.writeFileSync(LOG_FILE, '', 'utf8');
+            lastLogSize = 0;
+            io.emit('logs:cleared');
+            return res.json({ success: true, message: 'Logs permanently cleared' });
+        }
+        res.status(404).json({ success: false, error: 'Log file not found' });
+    } catch (e) {
+        console.error('[LOGS] Failed to clear log file:', e.message);
+        res.status(500).json({ success: false, error: e.message });
+    }
+});
+
 // OPTIMIZED POLLING INTERVAL (2 seconds instead of 1)
 setInterval(async () => {
     global.ticks++;
