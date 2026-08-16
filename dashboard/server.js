@@ -26,23 +26,51 @@ const RCLONE_URL = process.env.RCLONE_URL || 'http://rclone:5572';
 const RCLONE_USER = process.env.RCLONE_USER || 'admin';
 const RCLONE_PASS = process.env.RCLONE_PASS || '654550';
 
-const LOG_FILE = '/logs/upload.log';
+const LOG_FILE = process.env.LOG_FILE || (fs.existsSync('/logs/upload.log') ? '/logs/upload.log' : './aria2/upload.log');
 const CLOUD_DEST_FILE = '/config/cloud-destinations.json';
 
 console.log(`Starting Dashboard...`);
 console.log(`Aria2: ${ARIA2_URL}`);
 console.log(`Rclone: ${RCLONE_URL}`);
 
+// ponytail: in-memory / sync read of recent upload logs (upload.log is auto-rotated at 1MB, <1ms read)
+function getRecentLogs(count = 50) {
+    try {
+        if (fs.existsSync(LOG_FILE)) {
+            const content = fs.readFileSync(LOG_FILE, 'utf8');
+            return content.split('\n')
+                .map(l => l.replace(/(?:\x1b|\\e)\[[0-9;]*[a-zA-Z]/g, '').trim())
+                .filter(Boolean)
+                .slice(-count);
+        }
+    } catch (e) {
+        console.error('[LOGS] Failed to read log file:', e.message);
+    }
+    return [];
+}
+
+let lastLogSize = 0;
+try {
+    if (fs.existsSync(LOG_FILE)) lastLogSize = fs.statSync(LOG_FILE).size;
+} catch (e) { }
+
 if (fs.existsSync(LOG_FILE)) {
-    console.log(`Watching log file: ${LOG_FILE}`);
-    let fsWait = false;
-    fs.watch(LOG_FILE, (event, filename) => {
-        if (filename && event === 'change') {
-            if (fsWait) return;
-            fsWait = setTimeout(() => { fsWait = false; }, 100);
-            exec(`tail -n 1 ${LOG_FILE}`, (error, stdout, stderr) => {
-                if (!error && stdout) io.emit('log', stdout.trim());
+    console.log(`Watching log file: ${LOG_FILE} (size: ${lastLogSize})`);
+    fs.watchFile(LOG_FILE, { interval: 1000 }, (curr, prev) => {
+        if (curr.size > lastLogSize) {
+            const stream = fs.createReadStream(LOG_FILE, { start: lastLogSize, end: curr.size, encoding: 'utf8' });
+            let buffer = '';
+            stream.on('data', chunk => { buffer += chunk; });
+            stream.on('end', () => {
+                const lines = buffer.split('\n')
+                    .map(l => l.replace(/(?:\x1b|\\e)\[[0-9;]*[a-zA-Z]/g, '').trim())
+                    .filter(Boolean);
+                lines.forEach(line => io.emit('log', line));
             });
+            lastLogSize = curr.size;
+        } else if (curr.size < lastLogSize) {
+            // File rotated or truncated
+            lastLogSize = curr.size;
         }
     });
 } else {
@@ -713,6 +741,11 @@ app.post('/api/cloud/test', async (req, res) => {
 
 // ========== END MULTI-CLOUD STORAGE ==========
 
+// API endpoint for recent logs
+app.get('/api/logs', (req, res) => {
+    res.json({ logs: getRecentLogs(50) });
+});
+
 // OPTIMIZED POLLING INTERVAL (2 seconds instead of 1)
 setInterval(async () => {
     global.ticks++;
@@ -722,6 +755,7 @@ setInterval(async () => {
 
 io.on('connection', (socket) => {
     fetchStats().then(data => socket.emit('update', data));
+    socket.emit('logs:init', getRecentLogs(50));
 });
 
 const PORT = 3000;

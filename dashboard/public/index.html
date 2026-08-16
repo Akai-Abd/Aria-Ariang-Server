@@ -1054,18 +1054,48 @@ token = {&quot;access_token&quot;:&quot;...&quot;}" style="width:100%; backgroun
         socket.on('connect', () => { elConn.textContent = '● SYSTEM ONLINE'; elConn.style.color = '#00ff9d'; elConn.classList.remove('offline'); });
         socket.on('disconnect', () => { elConn.textContent = '● DISCONNECTED'; elConn.classList.add('offline'); });
 
-        socket.on('log', (line) => {
+        function renderLogLine(line) {
+            const cleanLine = (typeof line === 'string' ? line : '').replace(/(?:\x1b|\\e)\[[0-9;]*[a-zA-Z]/g, '').trim();
+            if (!cleanLine) return;
+
+            const placeholder = elLogs.querySelector('.log-line');
+            if (placeholder && placeholder.textContent.includes('Waiting for logs...')) {
+                elLogs.innerHTML = '';
+            }
+
             const div = document.createElement('div');
             div.className = 'log-line';
-            if (line.includes('ERROR') || line.includes('Failed')) div.style.color = '#ff0055';
-            else if (line.includes('INFO') || line.includes('Success')) div.style.color = '#00ff9d';
-            else if (line.includes('WARN')) div.style.color = '#f1c40f';
-            else if (line.includes('Uploading')) div.style.color = '#00f3ff';
-            div.textContent = `> ${line}`;
+            if (cleanLine.includes('ERROR') || cleanLine.includes('Failed')) div.style.color = '#ff0055';
+            else if (cleanLine.includes('INFO') || cleanLine.includes('Success')) div.style.color = '#00ff9d';
+            else if (cleanLine.includes('WARN')) div.style.color = '#f1c40f';
+            else if (cleanLine.includes('Uploading')) div.style.color = '#00f3ff';
+            div.textContent = `> ${cleanLine}`;
             elLogs.appendChild(div);
             elLogs.scrollTop = elLogs.scrollHeight;
-            if (elLogs.childElementCount > 50) elLogs.removeChild(elLogs.firstChild);
+            while (elLogs.childElementCount > 50) elLogs.removeChild(elLogs.firstChild);
+        }
+
+        socket.on('logs:init', (lines) => {
+            if (Array.isArray(lines) && lines.length > 0) {
+                elLogs.innerHTML = '';
+                lines.forEach(renderLogLine);
+            }
         });
+
+        socket.on('log', (line) => {
+            renderLogLine(line);
+        });
+
+        // Load logs immediately on page load / refresh
+        fetch('./api/logs')
+            .then(res => res.json())
+            .then(data => {
+                if (data && Array.isArray(data.logs) && data.logs.length > 0) {
+                    elLogs.innerHTML = '';
+                    data.logs.forEach(renderLogLine);
+                }
+            })
+            .catch(() => {});
 
         socket.on('update', (data) => {
             const down = data.network.down;
