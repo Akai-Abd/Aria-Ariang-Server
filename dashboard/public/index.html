@@ -271,6 +271,15 @@
             background: linear-gradient(180deg, rgba(11, 15, 25, 0.85) 0%, rgba(6, 8, 12, 0.95) 100%);
         }
 
+        .speed-wrapper {
+            position: relative;
+            width: 170px;
+            height: 170px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .speed-circle {
             width: 170px;
             height: 170px;
@@ -855,13 +864,15 @@ token = {&quot;access_token&quot;:&quot;...&quot;}" style="width:100%; backgroun
 
         <div class="panel speed-panel">
             <h2>Network Load</h2>
-            <div class="speed-circle" id="speed-ring"></div>
-            <div class="speed-content">
-                <span class="speed-value" style="color: var(--neon-blue)" id="down-speed">0.0</span>
-                <span class="speed-label">MB/s DOWN</span>
-                <span class="speed-value" style="color: var(--neon-pink); font-size: 24px; margin-top: 10px;"
-                    id="up-speed">0.0</span>
-                <span class="speed-label">MB/s UP</span>
+            <div class="speed-wrapper">
+                <div class="speed-circle" id="speed-ring"></div>
+                <div class="speed-content">
+                    <span class="speed-value" style="color: var(--neon-blue)" id="down-speed">0.0</span>
+                    <span class="speed-label">MB/s DOWN</span>
+                    <span class="speed-value" style="color: var(--neon-pink); font-size: 24px; margin-top: 10px;"
+                        id="up-speed">0.0</span>
+                    <span class="speed-label">MB/s UP</span>
+                </div>
             </div>
         </div>
 

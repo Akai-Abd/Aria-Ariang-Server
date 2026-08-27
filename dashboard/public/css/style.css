@@ -124,6 +124,15 @@ h2 {
     justify-content: center;
 }
 
+.speed-wrapper {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .speed-circle {
     width: 180px;
     height: 180px;
