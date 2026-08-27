@@ -98,6 +98,7 @@ services:
       - /etc/os-release:/host/os-release:ro
       - ./cloud-destinations.json:/config/cloud-destinations.json:rw
       - ./rclone:/config/rclone:rw
+      - ./dashboard/public:/app/public:ro
     networks:
       - aria2-net
     healthcheck:
